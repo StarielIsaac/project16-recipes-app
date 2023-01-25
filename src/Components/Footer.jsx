@@ -7,7 +7,6 @@ import mealIcon from '../images/mealIcon.svg';
 function Footer({ history }) {
   const clickHandle = (id) => {
     history.push(id);
-    console.log(history);
   };
 
   return (

@@ -28,6 +28,10 @@ function Login() {
     verificationButton();
   }, [senha]);
 
+  const submitButton = () => {
+    localStorage.setItem('user', JSON.stringify({ email }));
+  };
+
   return (
     <div>
       <label htmlFor="'input-email'">
@@ -55,6 +59,7 @@ function Login() {
       <button
         type="button"
         disabled={ isButton }
+        onClick={ submitButton }
         data-testid="login-submit-btn"
       >
         Entrar

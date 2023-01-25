@@ -7,7 +7,7 @@ function Login() {
 
   const verificationButton = () => {
     const regex = /\S+@\S+\.\S+/;
-    const minNumber = 5;
+    const minNumber = 6;
     const isValid = regex.test(email);
     if (isValid === true && senha.length > minNumber) {
       setIsButton(false);

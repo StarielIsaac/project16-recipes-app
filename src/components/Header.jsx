@@ -1,11 +1,17 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import profileIcon from '../images/profileIcon.svg';
 import searchIcon from '../images/searchIcon.svg';
 
 function Header({ title }) {
+  const [inputDisable, setInputDisable] = useState(false);
+
   const notSearch = ['Profile', 'Done Recipes', 'Favorite Recipes'];
+
+  const inputSearch = () => {
+    setInputDisable(!inputDisable);
+  };
 
   return (
     <>
@@ -18,11 +24,17 @@ function Header({ title }) {
         />
       </Link>
 
-      { !notSearch.includes(title) && <img
-        data-testid="search-top-btn"
-        src={ searchIcon }
-        alt="searchIcon"
-      />}
+      { !notSearch.includes(title)
+
+      && (
+        <button type="button" onClick={ inputSearch }>
+          <img
+            data-testid="search-top-btn"
+            src={ searchIcon }
+            alt="searchIcon"
+          />
+        </button>)}
+      {inputDisable && <input data-testid="search-input" type="text" />}
     </>
   );
 }

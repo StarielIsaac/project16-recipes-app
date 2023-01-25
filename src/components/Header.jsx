@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 import profileIcon from '../images/profileIcon.svg';
 import searchIcon from '../images/searchIcon.svg';
 
@@ -9,11 +10,14 @@ function Header({ title }) {
   return (
     <>
       <h1 data-testid="page-title">{ title }</h1>
-      <img
-        data-testid="profile-top-btn"
-        src={ profileIcon }
-        alt="profileIcon"
-      />
+      <Link to="/profile">
+        <img
+          data-testid="profile-top-btn"
+          src={ profileIcon }
+          alt="profileIcon"
+        />
+      </Link>
+
       { !notSearch.includes(title) && <img
         data-testid="search-top-btn"
         src={ searchIcon }

@@ -10,14 +10,12 @@ import Login from './pages/Login';
 function App() {
   return (
     <Router>
-      <div>
-        <Switch>
-          <Route exact path="/" component={ Login } />
-          <Route path="/drinks" component={ Drinks } />
-          <Route path="/meals" component={ Meals } />
-          <Route path="/profile" component={ Profile } />
-        </Switch>
-      </div>
+      <Switch>
+        <Route exact path="/" component={ Login } />
+        <Route path="/drinks" component={ Drinks } />
+        <Route path="/meals" component={ Meals } />
+        <Route path="/profile" component={ Profile } />
+      </Switch>
     </Router>
   );
 }

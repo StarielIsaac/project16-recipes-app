@@ -1,16 +1,13 @@
-import React from 'react';
-import Footer from '../Components/Footer';
-// import PropTypes from 'prop-types';
+import Header from '../components/Header';
+import Footer from '../components/Footer';
 
 function Drinks() {
   return (
-    <div>
-      <h1>Drinks</h1>
+    <>
+      <Header title="Drinks" />
       <Footer />
-    </div>
+    </>
   );
 }
-
-Drinks.propTypes = {};
 
 export default Drinks;

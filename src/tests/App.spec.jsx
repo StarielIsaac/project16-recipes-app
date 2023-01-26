@@ -26,26 +26,29 @@ describe('Componente Header', () => {
     expect(imgProfile).toBeInTheDocument();
   });
 
-  test('Verifica se existe o icon Search e se aparece/desaparece o inputSearch ao clicar', () => {
-    render(
-      <BrowserRouter>
-        <Header />
-      </BrowserRouter>,
-    );
+  test(
+    'Verifica se existe o icon Search e se aparece/desaparece o inputSearch ao clicar',
+    () => {
+      render(
+        <BrowserRouter>
+          <Header />
+        </BrowserRouter>,
+      );
 
-    const imgSearch = screen.getByRole('img', {
-      name: /searchicon/i,
-    });
+      const imgSearch = screen.getByRole('img', {
+        name: /searchicon/i,
+      });
 
-    userEvent.click(imgSearch);
-    const inputSearch = screen.getByRole('textbox');
-    expect(inputSearch).toBeInTheDocument();
+      userEvent.click(imgSearch);
+      const inputSearch = screen.getByRole('textbox');
+      expect(inputSearch).toBeInTheDocument();
 
-    userEvent.click(imgSearch);
-    expect(inputSearch).not.toBeInTheDocument();
+      userEvent.click(imgSearch);
+      expect(inputSearch).not.toBeInTheDocument();
 
-    expect(imgSearch).toBeInTheDocument();
-  });
+      expect(imgSearch).toBeInTheDocument();
+    },
+  );
 });
 
 describe('Componente Login', () => {

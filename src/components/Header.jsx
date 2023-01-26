@@ -1,11 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import profileIcon from '../images/profileIcon.svg';
 import searchIcon from '../images/searchIcon.svg';
+import HeaderContext from '../context/hearderContext';
 
 function Header({ title }) {
   const [inputDisable, setInputDisable] = useState(false);
+  const { valueInputSearch, setValueInputSearch } = useContext(HeaderContext);
 
   const notSearch = ['Profile', 'Done Recipes', 'Favorite Recipes'];
 
@@ -34,7 +36,15 @@ function Header({ title }) {
             alt="searchIcon"
           />
         </button>)}
-      {inputDisable && <input data-testid="search-input" type="text" />}
+      {inputDisable && (
+        <input
+          data-testid="search-input"
+          type="text"
+          value={ valueInputSearch }
+          onChange={
+            ({ target }) => setValueInputSearch(target.value)
+          }
+        />)}
     </>
   );
 }

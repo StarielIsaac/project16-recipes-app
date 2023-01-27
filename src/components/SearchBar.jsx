@@ -60,7 +60,7 @@ function SearchBar({ history }) {
 
   return (
     <>
-      <label htmlFor="search">
+      <label htmlFor="ingredientes">
         Ingredient:
         <input
           name="search"
@@ -71,7 +71,7 @@ function SearchBar({ history }) {
         />
       </label>
 
-      <label htmlFor="search">
+      <label htmlFor="nome">
         Name:
         <input
           name="search"
@@ -82,7 +82,7 @@ function SearchBar({ history }) {
         />
       </label>
 
-      <label htmlFor="search">
+      <label htmlFor="primeiraLetra">
         First letter:
         <input
           name="search"
@@ -103,5 +103,7 @@ function SearchBar({ history }) {
     </>
   );
 }
+
+SearchBar.propTypes = {}.isRequired;
 
 export default withRouter(SearchBar);

@@ -15,6 +15,10 @@ function Header({ title }) {
     setInputDisable(!inputDisable);
   };
 
+  const handleChange = ({ target }) => {
+    setValueInputSearch(target.value);
+  };
+
   return (
     <>
       <h1 data-testid="page-title">{ title }</h1>
@@ -41,9 +45,7 @@ function Header({ title }) {
           data-testid="search-input"
           type="text"
           value={ valueInputSearch }
-          onChange={
-            ({ target }) => setValueInputSearch(target.value)
-          }
+          onChange={ handleChange }
         />)}
     </>
   );

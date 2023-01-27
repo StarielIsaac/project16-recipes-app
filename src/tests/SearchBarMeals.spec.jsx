@@ -9,9 +9,13 @@ const email = 'trybeteste@hotmail.com';
 const senha = '12345678';
 
 describe('Testes das requisições das Apis', () => {
+  const data = {
+    meals: [{ idMeals: 1111 }],
+  };
+
   jest.spyOn(global, 'fetch');
   global.fetch.mockResolvedValue({
-    json: jest.fn().mockResolvedValue([]),
+    json: jest.fn().mockResolvedValue(data),
   });
 
   test('Testando a requisição da Api meals/ingredient', async () => {

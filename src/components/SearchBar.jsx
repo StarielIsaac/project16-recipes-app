@@ -9,23 +9,23 @@ import {
   fetchIngredientsDrinks,
   fetchNameDrinks,
   fetchFirstLetterDrinks } from '../services/ApiDrinks';
+import Recipes from './Recipe';
 
 function SearchBar({ history }) {
   const [searchRadioButton, setsearchRadioButton] = useState('');
+  const [recipes, setRecipes] = useState([]);
   const { valueInputSearch } = useContext(HeaderContext);
 
   const searchFetchMeals = () => {
     switch (searchRadioButton) {
     case 'ingredientes':
-      fetchIngredientsMeals(valueInputSearch);
-      break;
+      return fetchIngredientsMeals(valueInputSearch);
+
     case 'nome':
-      fetchNameMeals(valueInputSearch);
-      break;
+      return fetchNameMeals(valueInputSearch);
 
     case 'primeiraLetra':
-      fetchFirstLetterMeals(valueInputSearch);
-      break;
+      return fetchFirstLetterMeals(valueInputSearch);
 
     default:
       break;
@@ -35,27 +35,43 @@ function SearchBar({ history }) {
   const searchFetchDrinks = () => {
     switch (searchRadioButton) {
     case 'ingredientes':
-      fetchIngredientsDrinks(valueInputSearch);
-      break;
+      return fetchIngredientsDrinks(valueInputSearch);
+
     case 'nome':
-      fetchNameDrinks(valueInputSearch);
-      break;
+      return fetchNameDrinks(valueInputSearch);
 
     case 'primeiraLetra':
-      fetchFirstLetterDrinks(valueInputSearch);
-      break;
+      return fetchFirstLetterDrinks(valueInputSearch);
 
     default:
       break;
     }
   };
 
-  const isValidSearchInput = () => {
+  const validadRoute = (data, pathname) => {
+    if (data && data.meals && data.meals.length === 1 && pathname === '/meals') {
+      history.push(`/meals/${data.meals[0].idMeal}`);
+    }
+
+    if (data && data.drinks && data.drinks.length === 1 && pathname === '/drinks') {
+      history.push(`/drinks/${data.drinks[0].idDrink}`);
+    }
+    setRecipes(data.meals);
+  };
+
+  const isValidSearchInput = async () => {
     const { location: { pathname } } = history;
     if (searchRadioButton === 'primeiraLetra' && valueInputSearch.length > 1) {
       return global.alert('Your search must have only 1 (one) character');
     }
-    return pathname === '/meals' ? searchFetchMeals() : searchFetchDrinks();
+    if (pathname === '/meals') {
+      const data = await searchFetchMeals();
+      return validadRoute(data, pathname);
+    }
+    if (pathname === '/drinks') {
+      const data = await searchFetchDrinks();
+      return validadRoute(data, pathname);
+    }
   };
 
   return (
@@ -100,6 +116,7 @@ function SearchBar({ history }) {
         Buscar
 
       </button>
+      {recipes.length > 1 && recipes.map((recipe) => <Recipes key={ recipe.idMeal } />)}
     </>
   );
 }

@@ -1,77 +1,39 @@
 import { useContext, useState } from 'react';
 import { withRouter } from 'react-router-dom';
 import HeaderContext from '../context/hearderContext';
-import { fetchIngredientsMeals,
-  fetchNameMeals,
-  fetchFirstLetterMeals } from '../services/ApiMeals';
-
-import {
-  fetchIngredientsDrinks,
-  fetchNameDrinks,
-  fetchFirstLetterDrinks } from '../services/ApiDrinks';
 import Recipes from './Recipe';
+import { searchFetchDrinks, searchFetchMeals } from '../helpers/searchFetchSwitch';
 
 function SearchBar({ history }) {
   const [searchRadioButton, setsearchRadioButton] = useState('');
-  const [recipes, setRecipes] = useState([]);
+  const [recipes, setRecipes] = useState(null);
   const { valueInputSearch } = useContext(HeaderContext);
-
-  const searchFetchMeals = () => {
-    switch (searchRadioButton) {
-    case 'ingredientes':
-      return fetchIngredientsMeals(valueInputSearch);
-
-    case 'nome':
-      return fetchNameMeals(valueInputSearch);
-
-    case 'primeiraLetra':
-      return fetchFirstLetterMeals(valueInputSearch);
-
-    default:
-      break;
-    }
-  };
-
-  const searchFetchDrinks = () => {
-    switch (searchRadioButton) {
-    case 'ingredientes':
-      return fetchIngredientsDrinks(valueInputSearch);
-
-    case 'nome':
-      return fetchNameDrinks(valueInputSearch);
-
-    case 'primeiraLetra':
-      return fetchFirstLetterDrinks(valueInputSearch);
-
-    default:
-      break;
-    }
-  };
 
   const validadRoute = (data, pathname) => {
     if (data && data.meals && data.meals.length === 1 && pathname === '/meals') {
       history.push(`/meals/${data.meals[0].idMeal}`);
+      return setRecipes(data.meals);
     }
-
     if (data && data.drinks && data.drinks.length === 1 && pathname === '/drinks') {
       history.push(`/drinks/${data.drinks[0].idDrink}`);
+      return setRecipes(data.drinks);
     }
-    setRecipes(data.meals);
+    return setRecipes(data);
   };
 
   const isValidSearchInput = async () => {
     const { location: { pathname } } = history;
+    let data;
     if (searchRadioButton === 'primeiraLetra' && valueInputSearch.length > 1) {
       return global.alert('Your search must have only 1 (one) character');
     }
     if (pathname === '/meals') {
-      const data = await searchFetchMeals();
-      return validadRoute(data, pathname);
+      data = await searchFetchMeals(searchRadioButton, valueInputSearch);
     }
     if (pathname === '/drinks') {
-      const data = await searchFetchDrinks();
-      return validadRoute(data, pathname);
+      data = await searchFetchDrinks(searchRadioButton, valueInputSearch);
     }
+    return validadRoute(data, pathname);
   };
 
   return (
@@ -116,7 +78,7 @@ function SearchBar({ history }) {
         Buscar
 
       </button>
-      {recipes.length > 1 && recipes.map((recipe) => <Recipes key={ recipe.idMeal } />)}
+      {recipes && <Recipes recipes={ recipes } /> }
     </>
   );
 }

@@ -51,11 +51,11 @@ describe('Testes das requisições das Apis', () => {
 
     userEvent.click(imgSearch);
     const inputSearchEl = screen.getByRole('textbox');
-    userEvent.type(inputSearchEl, 'agua');
+    userEvent.type(inputSearchEl, 'water');
     userEvent.click(ingredient);
     userEvent.click(btnBusca);
 
-    expect(global.fetch).toHaveBeenCalledWith('https://www.thecocktaildb.com/api/json/v1/1/filter.php?i=agua');
+    expect(global.fetch).toHaveBeenCalledWith('https://www.thecocktaildb.com/api/json/v1/1/filter.php?i=water');
   });
 
   test('Testando a requisição da Api Drinks/name', async () => {
@@ -81,11 +81,11 @@ describe('Testes das requisições das Apis', () => {
 
     userEvent.click(imgSearch);
     const inputSearchEl = screen.getByRole('textbox');
-    userEvent.type(inputSearchEl, 'caffe');
+    userEvent.type(inputSearchEl, 'water');
     userEvent.click(name);
     userEvent.click(btnBusca);
 
-    expect(global.fetch).toHaveBeenCalledWith('https://www.thecocktaildb.com/api/json/v1/1/search.php?s=caffe');
+    expect(global.fetch).toHaveBeenCalledWith('https://www.thecocktaildb.com/api/json/v1/1/search.php?s=water');
   });
   test('Testando a requisição da Api Drinks/FirsLetter', async () => {
     render(

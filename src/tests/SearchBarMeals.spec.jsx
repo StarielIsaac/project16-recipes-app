@@ -9,13 +9,9 @@ const email = 'trybeteste@hotmail.com';
 const senha = '12345678';
 
 describe('Testes das requisições das Apis', () => {
-  const data = {
-    meals: [{ idMeals: 1111 }],
-  };
-
   jest.spyOn(global, 'fetch');
   global.fetch.mockResolvedValue({
-    json: jest.fn().mockResolvedValue(data),
+    json: jest.fn().mockResolvedValue([]),
   });
 
   test('Testando a requisição da Api meals/ingredient', async () => {
@@ -81,11 +77,11 @@ describe('Testes das requisições das Apis', () => {
 
     userEvent.click(imgSearch);
     const inputSearchEl = screen.getByRole('textbox');
-    userEvent.type(inputSearchEl, 'feijão');
+    userEvent.type(inputSearchEl, 'rice');
     userEvent.click(name);
     userEvent.click(btnBusca);
 
-    expect(global.fetch).toHaveBeenCalledWith('https://www.themealdb.com/api/json/v1/1/search.php?s=feijão');
+    expect(global.fetch).toHaveBeenCalledWith('https://www.themealdb.com/api/json/v1/1/search.php?s=rice');
   });
   test('Testando a requisição da Api meals/FirsLetter', async () => {
     render(
@@ -138,7 +134,7 @@ describe('Testes das requisições das Apis', () => {
     userEvent.click(btnBusca);
   });
 
-  test('asda', async () => {
+  test('testa a função alert', async () => {
     render(
       <HeaderProvider>
         <BrowserRouter>

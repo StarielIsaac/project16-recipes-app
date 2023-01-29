@@ -4,14 +4,17 @@ import './index.css';
 import { BrowserRouter } from 'react-router-dom';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
-import HeaderProvider from './context/headerProvider';
+import HeaderProvider from './context/HeaderProvider';
+import RecipesProvider from './context/RecipesProvider';
 
 ReactDOM
   .createRoot(document.getElementById('root'))
   .render(
     <BrowserRouter>
       <HeaderProvider>
-        <App />
+        <RecipesProvider>
+          <App />
+        </RecipesProvider>
       </HeaderProvider>
     </BrowserRouter>,
   );

@@ -3,7 +3,7 @@ import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { BrowserRouter } from 'react-router-dom';
 import Header from '../components/Header';
-import HeaderProvider from '../context/headerProvider';
+import HeaderProvider from '../context/HeaderProvider';
 
 describe('Componente Header', () => {
   test('Verifica se existe um title e uma image de profile', () => {

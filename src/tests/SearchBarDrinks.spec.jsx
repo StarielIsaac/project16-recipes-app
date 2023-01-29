@@ -2,8 +2,9 @@ import React from 'react';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { BrowserRouter } from 'react-router-dom';
-import HeaderProvider from '../context/headerProvider';
+import HeaderProvider from '../context/HeaderProvider';
 import App from '../App';
+import RecipesProvider from '../context/RecipesProvider';
 
 const email = 'trybeteste@hotmail.com';
 const senha = '12345678';
@@ -11,15 +12,17 @@ const senha = '12345678';
 describe('Testes das requisições das Apis', () => {
   jest.spyOn(global, 'fetch');
   global.fetch.mockResolvedValue({
-    json: jest.fn().mockResolvedValue([]),
+    json: jest.fn().mockResolvedValue({ drinks: [] }),
   });
 
   test('Testando a requisição da Api Drinks/ingredient', async () => {
     render(
       <HeaderProvider>
-        <BrowserRouter>
-          <App />
-        </BrowserRouter>
+        <RecipesProvider>
+          <BrowserRouter>
+            <App />
+          </BrowserRouter>
+        </RecipesProvider>
       </HeaderProvider>,
     );
 
@@ -61,9 +64,11 @@ describe('Testes das requisições das Apis', () => {
   test('Testando a requisição da Api Drinks/name', async () => {
     render(
       <HeaderProvider>
-        <BrowserRouter>
-          <App />
-        </BrowserRouter>
+        <RecipesProvider>
+          <BrowserRouter>
+            <App />
+          </BrowserRouter>
+        </RecipesProvider>
       </HeaderProvider>,
     );
 
@@ -90,9 +95,11 @@ describe('Testes das requisições das Apis', () => {
   test('Testando a requisição da Api Drinks/FirsLetter', async () => {
     render(
       <HeaderProvider>
-        <BrowserRouter>
-          <App />
-        </BrowserRouter>
+        <RecipesProvider>
+          <BrowserRouter>
+            <App />
+          </BrowserRouter>
+        </RecipesProvider>
       </HeaderProvider>,
     );
 
@@ -120,9 +127,11 @@ describe('Testes das requisições das Apis', () => {
   test('Testando a requisição da Api Radio buttons invalid Drinks', async () => {
     render(
       <HeaderProvider>
-        <BrowserRouter>
-          <App />
-        </BrowserRouter>
+        <RecipesProvider>
+          <BrowserRouter>
+            <App />
+          </BrowserRouter>
+        </RecipesProvider>
       </HeaderProvider>,
     );
 

@@ -15,7 +15,7 @@ describe('Testes das requisições das Apis', () => {
     json: jest.fn().mockResolvedValue({ meals: [] }),
   });
 
-  test('Testando a requisição da Api meals/ingredient', async () => {;
+  test('Testando a requisição da Api meals/ingredient', async () => {
     render(
       <HeaderProvider>
         <RecipesProvider>

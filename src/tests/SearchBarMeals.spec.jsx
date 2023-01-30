@@ -2,8 +2,10 @@ import React from 'react';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { BrowserRouter } from 'react-router-dom';
-import HeaderProvider from '../context/headerProvider';
+import HeaderProvider from '../context/HeaderProvider';
 import App from '../App';
+import RecipesProvider from '../context/RecipesProvider';
+import { renderWithRouter } from '../helpers/renderWith';
 
 const email = 'trybeteste@hotmail.com';
 const senha = '12345678';
@@ -11,15 +13,17 @@ const senha = '12345678';
 describe('Testes das requisições das Apis', () => {
   jest.spyOn(global, 'fetch');
   global.fetch.mockResolvedValue({
-    json: jest.fn().mockResolvedValue([]),
+    json: jest.fn().mockResolvedValue({ meals: [] }),
   });
 
   test('Testando a requisição da Api meals/ingredient', async () => {
     render(
       <HeaderProvider>
-        <BrowserRouter>
-          <App />
-        </BrowserRouter>
+        <RecipesProvider>
+          <BrowserRouter>
+            <App />
+          </BrowserRouter>
+        </RecipesProvider>
       </HeaderProvider>,
     );
 
@@ -44,9 +48,9 @@ describe('Testes das requisições das Apis', () => {
     expect(ingredient).toBeInTheDocument();
     expect(imgSearch).toBeInTheDocument();
     expect(btnBusca).toBeInTheDocument();
-
     userEvent.click(imgSearch);
     const inputSearchEl = screen.getByRole('textbox');
+
     userEvent.type(inputSearchEl, 'rice');
     userEvent.click(ingredient);
     userEvent.click(btnBusca);
@@ -57,9 +61,11 @@ describe('Testes das requisições das Apis', () => {
   test('Testando a requisição da Api meals/name', async () => {
     render(
       <HeaderProvider>
-        <BrowserRouter>
-          <App />
-        </BrowserRouter>
+        <RecipesProvider>
+          <BrowserRouter>
+            <App />
+          </BrowserRouter>
+        </RecipesProvider>
       </HeaderProvider>,
     );
 
@@ -86,9 +92,11 @@ describe('Testes das requisições das Apis', () => {
   test('Testando a requisição da Api meals/FirsLetter', async () => {
     render(
       <HeaderProvider>
-        <BrowserRouter>
-          <App />
-        </BrowserRouter>
+        <RecipesProvider>
+          <BrowserRouter>
+            <App />
+          </BrowserRouter>
+        </RecipesProvider>
       </HeaderProvider>,
     );
 
@@ -115,9 +123,11 @@ describe('Testes das requisições das Apis', () => {
   test('Testando a requisição da Api Radio buttons invalid Meals', async () => {
     render(
       <HeaderProvider>
-        <BrowserRouter>
-          <App />
-        </BrowserRouter>
+        <RecipesProvider>
+          <BrowserRouter>
+            <App />
+          </BrowserRouter>
+        </RecipesProvider>
       </HeaderProvider>,
     );
 
@@ -137,9 +147,11 @@ describe('Testes das requisições das Apis', () => {
   test('testa a função alert', async () => {
     render(
       <HeaderProvider>
-        <BrowserRouter>
-          <App />
-        </BrowserRouter>
+        <RecipesProvider>
+          <BrowserRouter>
+            <App />
+          </BrowserRouter>
+        </RecipesProvider>
       </HeaderProvider>,
     );
 
@@ -162,5 +174,48 @@ describe('Testes das requisições das Apis', () => {
     const spy = jest.spyOn(global, 'alert');
     userEvent.click(btnBusca);
     expect(spy).toHaveBeenCalled();
+  });
+
+  test('teste', async () => {
+    jest.spyOn(global, 'fetch');
+    global.fetch.mockResolvedValue({
+      json: jest.fn().mockResolvedValue({ meals: [{ idMeal: 52871 }] }),
+    });
+
+    const { history } = renderWithRouter(
+      <HeaderProvider>
+        <RecipesProvider>
+          <App />
+        </RecipesProvider>
+      </HeaderProvider>
+      ,
+    );
+
+    const inputEmail = screen.getByRole('textbox');
+    const inputSenha = screen.getByPlaceholderText(/senha:/i);
+    const btnEntrar = screen.getByRole('button', {
+      name: /entrar/i,
+    });
+
+    userEvent.type(inputEmail, email);
+    userEvent.type(inputSenha, senha);
+    userEvent.click(btnEntrar);
+
+    const FirstLetter = screen.getByText(/first letter:/i);
+    const btnBusca = screen.getByRole('button', {
+      name: /buscar/i,
+    });
+    const imgSearch = screen.getByRole('img', {
+      name: /searchicon/i,
+    });
+
+    userEvent.click(imgSearch);
+    const inputSearchEl = screen.getByRole('textbox');
+    userEvent.type(inputSearchEl, 'y');
+    userEvent.click(FirstLetter);
+    userEvent.click(btnBusca);
+
+    await new Promise((push) => { setTimeout(push, 100); });
+    expect(history.location.pathname).toBe('/meals/52871');
   });
 });

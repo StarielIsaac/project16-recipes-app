@@ -1,21 +1,62 @@
-import React from 'react';
+import React, { useContext, useEffect, useState } from 'react';
+import { withRouter } from 'react-router-dom';
+import RecipesContext from '../context/RecipesContext';
+import {
+  fetchDefaultMeals, fetchDefaultDrinks,
+} from '../services/ApiMealsOrDrinksDefaul';
 
-function Recipes({ recipes }) {
+function Recipes({ history }) {
+  const { recipes } = useContext(RecipesContext);
+  const [renderRecipes, setRenderRecipes] = useState(null);
+  const [existeFilterRecipe, setExisteFilterRecipe] = useState(true);
+
   const limitedRcipesNumber = 12;
-  let limitedRecipes = [];
-  if (recipes.meals) {
-    limitedRecipes = recipes.meals.filter((_, index) => index < limitedRcipesNumber);
-  }
-  if (recipes.drinks) {
-    limitedRecipes = recipes.drinks.filter((_, index) => index < limitedRcipesNumber);
-  }
 
-  if (!recipes.drinks && !recipes.meals) {
-    return global.alert('Sorry, we haven\'t found any recipes for these filters.');
-  }
+  const filterRecipesOrDefaultRecipes = (recipesDefault = false) => {
+    if (recipes || recipesDefault) {
+      const recipesBase = recipes || recipesDefault;
+      if (recipesBase.meals) {
+        const limitedRecipes = recipesBase.meals
+          .filter((_, index) => index < limitedRcipesNumber);
+        setRenderRecipes(limitedRecipes);
+      }
+      if (recipesBase.drinks) {
+        const limitedRecipes = recipesBase.drinks
+          .filter((_, index) => index < limitedRcipesNumber);
+        setRenderRecipes(limitedRecipes);
+      }
+
+      if (!recipesBase.drinks && !recipesBase.meals) {
+        return global.alert('Sorry, we haven\'t found any recipes for these filters.');
+      }
+    } else {
+      setExisteFilterRecipe(false);
+    }
+  };
+
+  const checkDefaultFetch = async () => {
+    let recipesDefault;
+    if (history.location.pathname === '/meals') {
+      recipesDefault = await fetchDefaultMeals();
+    }
+    if (history.location.pathname === '/drinks') {
+      recipesDefault = await fetchDefaultDrinks();
+    }
+    filterRecipesOrDefaultRecipes(recipesDefault);
+  };
+
+  useEffect(() => {
+    filterRecipesOrDefaultRecipes();
+  }, [recipes]);
+
+  useEffect(() => {
+    if (!renderRecipes) {
+      checkDefaultFetch();
+    }
+  }, [existeFilterRecipe]);
 
   return (
-    limitedRecipes.map((recipe, index) => (
+    renderRecipes && renderRecipes.map((recipe, index) => (
       <div data-testid={ `${index}-recipe-card` } key={ index }>
         <p data-testid={ `${index}-card-name` }>{recipe.strMeal || recipe.strDrink}</p>
         <img
@@ -29,4 +70,4 @@ function Recipes({ recipes }) {
   );
 }
 
-export default Recipes;
+export default withRouter(Recipes);

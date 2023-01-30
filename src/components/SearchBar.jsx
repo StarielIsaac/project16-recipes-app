@@ -1,12 +1,13 @@
 import { useContext, useState } from 'react';
 import { withRouter } from 'react-router-dom';
-import HeaderContext from '../context/hearderContext';
+import HeaderContext from '../context/HearderContext';
 import Recipes from './Recipe';
 import { searchFetchDrinks, searchFetchMeals } from '../helpers/searchFetchSwitch';
+import RecipesContext from '../context/RecipesContext';
 
 function SearchBar({ history }) {
   const [searchRadioButton, setsearchRadioButton] = useState('');
-  const [recipes, setRecipes] = useState(null);
+  const { setRecipes } = useContext(RecipesContext);
   const { valueInputSearch } = useContext(HeaderContext);
 
   const validadRoute = (data, pathname) => {
@@ -78,7 +79,7 @@ function SearchBar({ history }) {
         Buscar
 
       </button>
-      {recipes && <Recipes recipes={ recipes } /> }
+      <Recipes />
     </>
   );
 }

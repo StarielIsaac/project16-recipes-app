@@ -6,10 +6,6 @@ import Footer from '../components/Footer';
 function Profile() {
   const history = useHistory();
 
-  if (!localStorage.user) {
-    history.push('/');
-  }
-
   const user = JSON.parse(localStorage.getItem('user'));
 
   const clearLocalStorage = () => {
@@ -20,14 +16,14 @@ function Profile() {
   return (
     <>
       <Header title="Profile" />
-      <span
+      <p
         htmlFor="input-email"
         type="email"
         name="email"
         data-testid="profile-email"
       >
         { user ? user.email : '' }
-      </span>
+      </p>
       <Link to="/done-recipes">
         <button
           type="button"

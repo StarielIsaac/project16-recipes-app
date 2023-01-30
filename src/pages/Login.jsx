@@ -27,6 +27,7 @@ function Login({ history }) {
 
   useEffect(() => {
     verificationButton();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [senha]);
 
   const submitButton = () => {

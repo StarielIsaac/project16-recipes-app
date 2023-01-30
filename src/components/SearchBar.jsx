@@ -7,7 +7,7 @@ import RecipesContext from '../context/RecipesContext';
 
 function SearchBar({ history }) {
   const [searchRadioButton, setsearchRadioButton] = useState('');
-  const { recipes, setRecipes } = useContext(RecipesContext);
+  const { setRecipes } = useContext(RecipesContext);
   const { valueInputSearch } = useContext(HeaderContext);
 
   const validadRoute = (data, pathname) => {
@@ -79,7 +79,7 @@ function SearchBar({ history }) {
         Buscar
 
       </button>
-      {recipes ? <Recipes recipes={ recipes } /> : <Recipes />}
+      <Recipes />
     </>
   );
 }

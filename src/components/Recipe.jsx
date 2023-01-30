@@ -47,12 +47,14 @@ function Recipes({ history }) {
 
   useEffect(() => {
     filterRecipesOrDefaultRecipes();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [recipes]);
 
   useEffect(() => {
     if (!renderRecipes) {
       checkDefaultFetch();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [existeFilterRecipe]);
 
   return (

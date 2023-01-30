@@ -1,8 +1,7 @@
 import React from 'react';
-import { render, screen, waitFor, act } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { BrowserRouter, MemoryRouter } from 'react-router-dom';
-import { wait } from '@testing-library/user-event/dist/utils';
+import { BrowserRouter } from 'react-router-dom';
 import HeaderProvider from '../context/HeaderProvider';
 import App from '../App';
 import RecipesProvider from '../context/RecipesProvider';

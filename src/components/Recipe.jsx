@@ -8,29 +8,26 @@ import {
 function Recipes({ history }) {
   const { recipes } = useContext(RecipesContext);
   const [renderRecipes, setRenderRecipes] = useState(null);
-  const [existeFilterRecipe, setExisteFilterRecipe] = useState(true);
 
-  const limitedRcipesNumber = 12;
+  const maxRecipes = 12;
 
-  const filterRecipesOrDefaultRecipes = (recipesDefault = false) => {
+  const filterRecipesOrDefaultRecipes = (recipesDefault) => {
     if (recipes || recipesDefault) {
       const recipesBase = recipes || recipesDefault;
       if (recipesBase.meals) {
         const limitedRecipes = recipesBase.meals
-          .filter((_, index) => index < limitedRcipesNumber);
+          .filter((_, index) => index < maxRecipes);
         setRenderRecipes(limitedRecipes);
       }
       if (recipesBase.drinks) {
         const limitedRecipes = recipesBase.drinks
-          .filter((_, index) => index < limitedRcipesNumber);
+          .filter((_, index) => index < maxRecipes);
         setRenderRecipes(limitedRecipes);
       }
 
       if (!recipesBase.drinks && !recipesBase.meals) {
         return global.alert('Sorry, we haven\'t found any recipes for these filters.');
       }
-    } else {
-      setExisteFilterRecipe(false);
     }
   };
 
@@ -51,11 +48,9 @@ function Recipes({ history }) {
   }, [recipes]);
 
   useEffect(() => {
-    if (!renderRecipes) {
-      checkDefaultFetch();
-    }
+    checkDefaultFetch();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [existeFilterRecipe]);
+  }, []);
 
   return (
     renderRecipes && renderRecipes.map((recipe, index) => (

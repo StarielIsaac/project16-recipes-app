@@ -1,7 +1,7 @@
 import { useContext, useState } from 'react';
 import { withRouter } from 'react-router-dom';
 import HeaderContext from '../context/HearderContext';
-import Recipes from './Recipe';
+import Recipes from './Recipes';
 import { searchFetchDrinks, searchFetchMeals } from '../helpers/searchFetchSwitch';
 import RecipesContext from '../context/RecipesContext';
 

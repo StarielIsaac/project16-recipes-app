@@ -176,7 +176,7 @@ describe('Testes das requisições das Apis', () => {
     expect(spy).toHaveBeenCalled();
   });
 
-  test('teste', async () => {
+  test('verifica se a rota do pathname é alterada', async () => {
     jest.spyOn(global, 'fetch');
     global.fetch.mockResolvedValue({
       json: jest.fn().mockResolvedValue({ meals: [{ idMeal: 52871 }] }),

@@ -10,6 +10,19 @@ const email = 'trybeteste@hotmail.com';
 const senha = '12345678';
 
 describe('Componente Recipes', () => {
+  jest.spyOn(global, 'fetch');
+  global.fetch.mockResolvedValue({
+    json: jest.fn().mockResolvedValue({ meals: [
+      { strCategory: 'a' },
+      { strCategory: 'b' },
+      { strCategory: 'c' },
+      { strCategory: 'd' },
+      { strCategory: 'e' },
+      { strCategory: 'f' },
+      { strCategory: 'g' },
+    ] }),
+  });
+
   test('Verifica se existem os 5 buttons das categorias meals', async () => {
     jest.spyOn(global, 'fetch');
     global.fetch.mockResolvedValue({
@@ -117,10 +130,68 @@ describe('Componente Recipes', () => {
       name: 'ee',
     });
 
+    const AllFilter = screen.getByRole('button', {
+      name: /all/i,
+    });
+
     expect(btnAA).toBeInTheDocument();
     expect(btnBB).toBeInTheDocument();
     expect(btnCC).toBeInTheDocument();
     expect(btnDD).toBeInTheDocument();
     expect(btnEE).toBeInTheDocument();
+    userEvent.click(AllFilter);
+  });
+
+  test('testa os botoes de categorias', async () => {
+    jest.spyOn(global, 'fetch');
+    global.fetch.mockResolvedValue({
+      json: jest.fn().mockResolvedValue({ drinks: [
+        { strCategory: 'aa' },
+        { strCategory: 'bb' },
+        { strCategory: 'cc' },
+        { strCategory: 'dd' },
+        { strCategory: 'ee' },
+        { strCategory: 'ff' },
+        { strCategory: 'gg' },
+      ] }),
+    });
+
+    renderWithRouter(
+      <HeaderProvider>
+        <RecipesProvider>
+          <App />
+        </RecipesProvider>
+      </HeaderProvider>
+      ,
+    );
+
+    const inputEmail = screen.getByRole('textbox');
+    const inputSenha = screen.getByPlaceholderText(/senha:/i);
+    const btnEntrar = screen.getByRole('button', {
+      name: /entrar/i,
+    });
+
+    userEvent.type(inputEmail, email);
+    userEvent.type(inputSenha, senha);
+    userEvent.click(btnEntrar);
+
+    await new Promise((fetch) => { setTimeout(fetch, 100); });
+    const btnAA = screen.getByRole('button', {
+      name: 'aa',
+    });
+
+    userEvent.click(btnAA);
+    await new Promise((fetch) => { setTimeout(fetch, 100); });
+    userEvent.click(btnAA);
+    const btnDrinks = screen.getByRole('img', {
+      name: /drink icon/i,
+    });
+
+    userEvent.click(btnDrinks);
+    await new Promise((fetch) => { setTimeout(fetch, 100); });
+    const btnAAdrinks = screen.getByRole('button', {
+      name: 'aa',
+    });
+    userEvent.click(btnAAdrinks);
   });
 });

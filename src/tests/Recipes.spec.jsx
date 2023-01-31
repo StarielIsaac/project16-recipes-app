@@ -156,7 +156,7 @@ describe('Componente Recipes', () => {
       ] }),
     });
 
-    const { history } = renderWithRouter(
+    renderWithRouter(
       <HeaderProvider>
         <RecipesProvider>
           <App />

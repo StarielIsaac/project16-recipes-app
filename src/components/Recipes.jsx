@@ -151,7 +151,6 @@ function Recipes({ history }) {
             key={ index }
           >
             <div
-              value={ recipe.idMeal || recipe.idDrink }
               data-testid={ `${index}-recipe-card` }
               key={ index }
             >

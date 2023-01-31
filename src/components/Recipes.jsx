@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { withRouter } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 import RecipesContext from '../context/RecipesContext';
 import { fetchDefaulCategoriesMeals,
   fetchDefaultCategoriesDrinks } from '../services/ApiCategories';
@@ -77,7 +77,6 @@ function Recipes({ history }) {
   };
 
   const fetchByCategory = async ({ target }) => {
-    console.log('exis', ExistFilter, 'targt', target.value);
     if (ExistFilter === target.value) {
       setExisfilter('');
       return setRecipes(null);
@@ -144,16 +143,28 @@ function Recipes({ history }) {
       </button>
       <div>
         {renderRecipes && renderRecipes.map((recipe, index) => (
-          <div data-testid={ `${index}-recipe-card` } key={ index }>
-            <p data-testid={ `${index}-card-name` }>
-              {recipe.strMeal || recipe.strDrink}
-            </p>
-            <img
-              src={ recipe.strMealThumb || recipe.strDrinkThumb }
-              alt={ recipe.strMealThumb || recipe.strDrinkThumb }
-              data-testid={ `${index}-card-img` }
-            />
-          </div>
+
+          <Link
+            to={
+              `${history.location.pathname}/${recipe.idMeal || recipe.idDrink}`
+            }
+            key={ index }
+          >
+            <div
+              value={ recipe.idMeal || recipe.idDrink }
+              data-testid={ `${index}-recipe-card` }
+              key={ index }
+            >
+              <p data-testid={ `${index}-card-name` }>
+                {recipe.strMeal || recipe.strDrink}
+              </p>
+              <img
+                src={ recipe.strMealThumb || recipe.strDrinkThumb }
+                alt={ recipe.strMealThumb || recipe.strDrinkThumb }
+                data-testid={ `${index}-card-img` }
+              />
+            </div>
+          </Link>
         ))}
       </div>
     </div>

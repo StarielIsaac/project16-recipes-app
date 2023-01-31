@@ -149,7 +149,7 @@ describe('Testes das requisições das Apis', () => {
     userEvent.click(btnBusca);
   });
 
-  test('teste', async () => {
+  test('verifica se a rota do pathname é alterada', async () => {
     jest.spyOn(global, 'fetch');
     global.fetch.mockResolvedValue({
       json: jest.fn().mockResolvedValue({ drinks: [{ idDrink: 89532 }] }),

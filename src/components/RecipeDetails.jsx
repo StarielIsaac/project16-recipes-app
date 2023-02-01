@@ -1,4 +1,3 @@
-import { object } from 'prop-types';
 import React, { useEffect, useState } from 'react';
 import { withRouter } from 'react-router-dom';
 import { fetchDetailsDrinks, fetchDetailstMeals } from '../services/ApiRecipeDetails';
@@ -7,7 +6,6 @@ function RecipeDetails(props) {
   const [recipeDetailsRender, setDetailsRender] = useState([]);
   const [recipeIngredients, setRecipeIngredients] = useState(null);
 
-  // recipeDetailsRender.length > 0 && console.log(Object.entries(recipeDetailsRender[0]))
   const { match: { params: { id } } } = props;
   const { history } = props;
   const fetchDetails = async () => {

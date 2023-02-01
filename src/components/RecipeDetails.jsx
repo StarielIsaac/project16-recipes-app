@@ -1,8 +1,13 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { withRouter } from 'react-router-dom';
+import RecommendationsContext from '../context/RecommendationsContext';
 import { fetchDetailsDrinks, fetchDetailstMeals } from '../services/ApiRecipeDetails';
+import { fetchRecommendationsDrinks,
+  fetchRecommendationsMeals } from '../services/Apirecommendations';
 
 function RecipeDetails(props) {
+  const { setDrinksRecommendations, mealsRecommendations,
+    drinksRecommendations, setMealsRecommendations } = useContext(RecommendationsContext);
   const [recipeDetailsRender, setDetailsRender] = useState([]);
   const [recipeIngredients, setRecipeIngredients] = useState(null);
 
@@ -33,6 +38,23 @@ function RecipeDetails(props) {
     }
     setRecipeIngredients(auxIngredientes);
   };
+
+  const fetchRecommendations = async () => {
+    if (history.location.pathname.includes('/meals/')) {
+      const recommendations = await fetchRecommendationsDrinks();
+      setDrinksRecommendations(recommendations);
+    }
+    if (history.location.pathname.includes('/drinks/')) {
+      const recommendations = await fetchRecommendationsMeals();
+      setMealsRecommendations(recommendations);
+    }
+  };
+
+  useEffect(() => {
+    if (!drinksRecommendations || !mealsRecommendations) {
+      fetchRecommendations();
+    }
+  }, []);
 
   useEffect(() => {
     fetchDetails();

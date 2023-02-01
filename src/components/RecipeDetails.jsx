@@ -6,13 +6,17 @@ import { fetchRecommendationsDrinks,
   fetchRecommendationsMeals } from '../services/Apirecommendations';
 
 function RecipeDetails(props) {
+  const maxRecipes = 6;
+
   const { setDrinksRecommendations, mealsRecommendations,
     drinksRecommendations, setMealsRecommendations } = useContext(RecommendationsContext);
   const [recipeDetailsRender, setDetailsRender] = useState([]);
   const [recipeIngredients, setRecipeIngredients] = useState(null);
+  const [renderRecommendation, setRenderRecommendation] = useState(null);
 
   const { match: { params: { id } } } = props;
   const { history } = props;
+
   const fetchDetails = async () => {
     let recipeDetailsFetch;
     if (history.location.pathname.includes('/meals/')) {
@@ -42,16 +46,36 @@ function RecipeDetails(props) {
   const fetchRecommendations = async () => {
     if (history.location.pathname.includes('/meals/')) {
       const recommendations = await fetchRecommendationsDrinks();
-      setDrinksRecommendations(recommendations);
+      setDrinksRecommendations(recommendations.drinks);
     }
     if (history.location.pathname.includes('/drinks/')) {
       const recommendations = await fetchRecommendationsMeals();
-      setMealsRecommendations(recommendations);
+      setMealsRecommendations(recommendations.meals);
+    }
+  };
+
+  const filterRecommendations = () => {
+    if (history.location.pathname.includes('/meals/')) {
+      const recommendations = drinksRecommendations
+        .filter((_, index) => index < maxRecipes);
+      setRenderRecommendation(recommendations);
+    }
+
+    if (history.location.pathname.includes('/drinks/')) {
+      const recommendations = mealsRecommendations
+        .filter((_, index) => index < maxRecipes);
+      setRenderRecommendation(recommendations);
     }
   };
 
   useEffect(() => {
-    if (!drinksRecommendations || !mealsRecommendations) {
+    if (mealsRecommendations.length > 0 || drinksRecommendations.length > 0) {
+      filterRecommendations();
+    }
+  }, [mealsRecommendations, drinksRecommendations]);
+
+  useEffect(() => {
+    if (drinksRecommendations.length === 0 || mealsRecommendations.length === 0) {
       fetchRecommendations();
     }
   }, []);
@@ -115,6 +139,22 @@ function RecipeDetails(props) {
           />
         </div>
       ))}
+
+      <div>
+        {renderRecommendation && renderRecommendation.map((recipe, index) => (
+          <div
+            data-testid={ `${index}-recommendation-card` }
+            key={ index }
+          >
+
+            <h1 data-testid={ `${index}-recommendation-title` }>
+              {recipe.strMeal || recipe.strDrink}
+            </h1>
+          </div>
+
+        ))}
+      </div>
+
     </>
 
   );

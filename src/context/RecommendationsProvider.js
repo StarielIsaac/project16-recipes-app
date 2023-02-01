@@ -2,8 +2,8 @@ import { useMemo, useState } from 'react';
 import RecommendationsContext from './RecommendationsContext';
 
 function RecommendationsProvider({ children }) {
-  const [mealsRecommendations, setMealsRecommendations] = useState(null);
-  const [drinksRecommendations, setDrinksRecommendations] = useState(null);
+  const [mealsRecommendations, setMealsRecommendations] = useState([]);
+  const [drinksRecommendations, setDrinksRecommendations] = useState([]);
 
   const values = useMemo(() => ({
     mealsRecommendations,

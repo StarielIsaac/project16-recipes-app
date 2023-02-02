@@ -4,6 +4,7 @@ import RecommendationsContext from '../context/RecommendationsContext';
 import { fetchDetailsDrinks, fetchDetailstMeals } from '../services/ApiRecipeDetails';
 import { fetchRecommendationsDrinks,
   fetchRecommendationsMeals } from '../services/Apirecommendations';
+import StartDetails from './StartDetails';
 
 function RecipeDetails(props) {
   const maxRecipes = 6;
@@ -140,11 +141,12 @@ function RecipeDetails(props) {
         </div>
       ))}
 
-      <div>
+      <div className="scroll">
         {renderRecommendation && renderRecommendation.map((recipe, index) => (
           <div
             data-testid={ `${index}-recommendation-card` }
             key={ index }
+            className="quad"
           >
 
             <h1 data-testid={ `${index}-recommendation-title` }>
@@ -154,7 +156,7 @@ function RecipeDetails(props) {
 
         ))}
       </div>
-
+      <StartDetails />
     </>
 
   );

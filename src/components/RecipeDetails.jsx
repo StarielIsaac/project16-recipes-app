@@ -74,35 +74,34 @@ function RecipeDetails(props) {
 
   const checkedKeyAndItemId = () => {
     if (recipeDetailsRender.length > 0 && recipeDetailsRender[0].idMeal) {
-      setChave('Meals');
+      setChave('meals');
       setIdItem(recipeDetailsRender[0].idMeal);
     }
 
     if (recipeDetailsRender.length > 0 && recipeDetailsRender[0].idDrink) {
-      setChave('Drinks');
+      setChave('drinks');
       setIdItem(recipeDetailsRender[0].idDrink);
     }
   };
 
   const checkedButtonName = () => {
-    checkedKeyAndItemId();
     const progressRecipes = JSON.parse(localStorage.getItem('inProgressRecipes')) || [];
-    if (chave !== '' && !progressRecipes[chave]) {
+    console.log(progressRecipes);
+    if (chave !== '' && progressRecipes[chave] === undefined) {
       return setNameButton(INITIAL_BUTTON_NAME);
     }
+
     if (progressRecipes[chave] && !progressRecipes[chave][idItem]) {
       return setNameButton(INITIAL_BUTTON_NAME);
     }
-  };
-
-  const checkedRouterPush = () => {
-    const itemRoute = chave.toLocaleLowerCase();
-    if (nameButton === INITIAL_BUTTON_NAME) {
-      history.push(`/${itemRoute}/${idItem}/in-progress`);
-    }
+    setNameButton('Continue Recipe');
   };
 
   const setRecipesStorage = () => {
+    // const itemRoute = chave.toLocaleLowerCase();
+    // if (nameButton === INITIAL_BUTTON_NAME) {
+    //   return history.push(`/${itemRoute}/${idItem}/in-progress`);
+    // }
     const progressRecipes = JSON.parse(localStorage.getItem('inProgressRecipes')) || [];
     localStorage.setItem('inProgressRecipes', JSON.stringify(
       { ...progressRecipes,
@@ -112,7 +111,6 @@ function RecipeDetails(props) {
         },
       },
     ));
-    checkedRouterPush();
     checkedButtonName();
   };
 
@@ -140,8 +138,11 @@ function RecipeDetails(props) {
 
   useEffect(() => {
     checkedKeyAndItemId();
-    checkedButtonName();
   });
+
+  useEffect(() => {
+    checkedButtonName();
+  }, [chave]);
 
   return (
 

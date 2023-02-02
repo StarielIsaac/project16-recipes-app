@@ -1,64 +1,76 @@
+import { useEffect, useState } from 'react';
 import Header from '../components/Header';
+import newMock from '../services/MockRandomDrink';
+import LikeNShareButtons from '../components/LikeNShareButtons';
 
 function FavoriteRecipes() {
+  const [dataFavorites, setDataFavorites] = useState([]);
+
+  useEffect(() => {
+    // const stored = localStorage.getItem('favoriteRecipes');
+    // const data = JSON.parse(stored);
+
+    setDataFavorites(newMock);
+  }, []);
+
   return (
     <div>
       <Header title="Favorite Recipes" />
-      <forms>
-        <button
-          type="button"
-          data-testid="filter-by-all-btn"
-        >
-          All
-        </button>
-        <button
-          type="button"
-          data-testid="filter-by-meal-btn"
-        >
-          Meals
-        </button>
-        <button
-          type="button"
-          data-testid="filter-by-drink-btn"
-        >
-          Drinks
-        </button>
-        <br />
-        <br />
-        {/* Fazer map dos elementos contidos em localStorage.getItem('favoriteRecipes') */}
-        <img
-          src="provisorio"
-          alt="provisorio"
-          // data-testid={ `${index}-horizontal-image"` }
-        />
-        <br />
-        <br />
-        <p
-          name="HorizontalTopText"
-          // data-testid={ `${index}-horizontal-top-text` }
-        >
-          Categoria: Provisorio
-        </p>
-        <br />
-        <p
-          name="HorizontalName"
-          // data-testid={ `${index}-horizontal-name` }
-        >
-          Nome da Receita: Provisorio
-        </p>
-        <button
-          type="button"
-          // data-testid={ `${index}-horizontal-share-btn` }
-        >
-          Compartilhar a Receita
-        </button>
-        <button
-          type="button"
-          // data-testid={ `${index}-horizontal-favorite-btn` }
-        >
-          favoritar a receita
-        </button>
-      </forms>
+      <button
+        type="button"
+        data-testid="filter-by-all-btn"
+      >
+        All
+      </button>
+      <button
+        type="button"
+        data-testid="filter-by-meal-btn"
+      >
+        Meals
+      </button>
+      <button
+        type="button"
+        data-testid="filter-by-drink-btn"
+      >
+        Drinks
+      </button>
+      <br />
+      <br />
+      <br />
+      {dataFavorites.map((recipe, index) => (
+        <div key={ recipe.id }>
+          <img
+            src={ recipe.image }
+            alt={ recipe.name }
+            data-testid={ `${index}-horizontal-image"` }
+            width="250px"
+            style={ { borderRadius: '10%' } }
+          />
+          <br />
+          <br />
+          <p
+            name="HorizontalName"
+            data-testid={ `${index}-horizontal-name` }
+          >
+            {`${recipe.name}`}
+          </p>
+          <p
+            name="HorizontalTopText"
+            data-testid={ `${index}-horizontal-top-text` }
+          >
+            {recipe.nationality ? `${recipe.nationality} - ${recipe.category}`
+              : `${recipe.alcoholicOrNot}`}
+          </p>
+          <LikeNShareButtons
+            index={ index }
+            id={ recipe.id }
+            type={ recipe.type }
+          />
+          <br />
+          <br />
+          <br />
+        </div>
+      ))}
     </div>
   );
 }

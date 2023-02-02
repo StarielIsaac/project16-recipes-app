@@ -4,16 +4,19 @@ import RecommendationsContext from '../context/RecommendationsContext';
 import { fetchDetailsDrinks, fetchDetailstMeals } from '../services/ApiRecipeDetails';
 import { fetchRecommendationsDrinks,
   fetchRecommendationsMeals } from '../services/Apirecommendations';
-import StartDetails from './StartDetails';
 
 function RecipeDetails(props) {
   const maxRecipes = 6;
+  const INITIAL_BUTTON_NAME = 'Start Recipe';
 
   const { setDrinksRecommendations, mealsRecommendations,
     drinksRecommendations, setMealsRecommendations } = useContext(RecommendationsContext);
   const [recipeDetailsRender, setDetailsRender] = useState([]);
   const [recipeIngredients, setRecipeIngredients] = useState(null);
   const [renderRecommendation, setRenderRecommendation] = useState(null);
+  const [nameButton, setNameButton] = useState('Continue Recipe');
+  const [chave, setChave] = useState('');
+  const [idItem, setIdItem] = useState('');
 
   const { match: { params: { id } } } = props;
   const { history } = props;
@@ -69,6 +72,48 @@ function RecipeDetails(props) {
     }
   };
 
+  const checkedKeyAndItemId = () => {
+    if (recipeDetailsRender.length > 0 && recipeDetailsRender[0].idMeal) {
+      setChave('meals');
+      setIdItem(recipeDetailsRender[0].idMeal);
+    }
+
+    if (recipeDetailsRender.length > 0 && recipeDetailsRender[0].idDrink) {
+      setChave('drinks');
+      setIdItem(recipeDetailsRender[0].idDrink);
+    }
+  };
+
+  const checkedButtonName = () => {
+    const progressRecipes = JSON.parse(localStorage.getItem('inProgressRecipes')) || [];
+    console.log(progressRecipes);
+    if (chave !== '' && progressRecipes[chave] === undefined) {
+      return setNameButton(INITIAL_BUTTON_NAME);
+    }
+
+    if (progressRecipes[chave] && !progressRecipes[chave][idItem]) {
+      return setNameButton(INITIAL_BUTTON_NAME);
+    }
+    setNameButton('Continue Recipe');
+  };
+
+  const setRecipesStorage = () => {
+    // const itemRoute = chave.toLocaleLowerCase();
+    // if (nameButton === INITIAL_BUTTON_NAME) {
+    //   return history.push(`/${itemRoute}/${idItem}/in-progress`);
+    // }
+    const progressRecipes = JSON.parse(localStorage.getItem('inProgressRecipes')) || [];
+    localStorage.setItem('inProgressRecipes', JSON.stringify(
+      { ...progressRecipes,
+        [chave]: {
+          ...progressRecipes[chave],
+          [idItem]: recipeIngredients,
+        },
+      },
+    ));
+    checkedButtonName();
+  };
+
   useEffect(() => {
     if (mealsRecommendations.length > 0 || drinksRecommendations.length > 0) {
       filterRecommendations();
@@ -90,6 +135,14 @@ function RecipeDetails(props) {
       filterIngredients();
     }
   }, [recipeDetailsRender]);
+
+  useEffect(() => {
+    checkedKeyAndItemId();
+  });
+
+  useEffect(() => {
+    checkedButtonName();
+  }, [chave]);
 
   return (
 
@@ -156,7 +209,14 @@ function RecipeDetails(props) {
 
         ))}
       </div>
-      <StartDetails />
+      <button
+        type="button"
+        data-testid="start-recipe-btn"
+        className="start-button"
+        onClick={ setRecipesStorage }
+      >
+        {nameButton}
+      </button>
     </>
 
   );

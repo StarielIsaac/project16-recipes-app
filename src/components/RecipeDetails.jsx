@@ -4,7 +4,6 @@ import RecommendationsContext from '../context/RecommendationsContext';
 import { fetchDetailsDrinks, fetchDetailstMeals } from '../services/ApiRecipeDetails';
 import { fetchRecommendationsDrinks,
   fetchRecommendationsMeals } from '../services/Apirecommendations';
-import StartDetails from './StartDetails';
 
 function RecipeDetails(props) {
   const maxRecipes = 6;
@@ -14,6 +13,9 @@ function RecipeDetails(props) {
   const [recipeDetailsRender, setDetailsRender] = useState([]);
   const [recipeIngredients, setRecipeIngredients] = useState(null);
   const [renderRecommendation, setRenderRecommendation] = useState(null);
+  const [nameButton, setNameButton] = useState('Continue Recipe');
+  const [chave, setChave] = useState('');
+  const [idItem, setIdItem] = useState('');
 
   const { match: { params: { id } } } = props;
   const { history } = props;
@@ -70,6 +72,38 @@ function RecipeDetails(props) {
   };
 
   useEffect(() => {
+    if (recipeDetailsRender.length > 0 && recipeDetailsRender[0].idMeal) {
+      setChave('Meals');
+      setIdItem(recipeDetailsRender[0].idMeal);
+    }
+
+    if (recipeDetailsRender.length > 0 && recipeDetailsRender[0].idDrink) {
+      setChave('Drinks');
+      setIdItem(recipeDetailsRender[0].idDrink);
+    }
+  }, [recipeDetailsRender]);
+
+  const checkedButtonName = () => {
+    const progressRecipes = JSON.parse(localStorage.getItem('inProgressRecipes')) || [];
+    if (progressRecipes[chave] && !progressRecipes[chave][idItem]) {
+      setNameButton('Start Recipe');
+    }
+  };
+
+  const setRecipesStorage = () => {
+    const progressRecipes = JSON.parse(localStorage.getItem('inProgressRecipes')) || [];
+    localStorage.setItem('inProgressRecipes', JSON.stringify(
+      { ...progressRecipes,
+        [chave]: {
+          ...progressRecipes[chave],
+          [idItem]: recipeIngredients,
+        },
+      },
+    ));
+    checkedButtonName();
+  };
+
+  useEffect(() => {
     if (mealsRecommendations.length > 0 || drinksRecommendations.length > 0) {
       filterRecommendations();
     }
@@ -90,6 +124,10 @@ function RecipeDetails(props) {
       filterIngredients();
     }
   }, [recipeDetailsRender]);
+
+  useEffect(() => {
+    checkedButtonName();
+  });
 
   return (
 
@@ -156,7 +194,15 @@ function RecipeDetails(props) {
 
         ))}
       </div>
-      <StartDetails />
+      <button
+        type="button"
+        data-testid="start-recipe-btn"
+        className="start-button"
+        onClick={ setRecipesStorage }
+        value={ nameButton }
+      >
+        {nameButton}
+      </button>
     </>
 
   );

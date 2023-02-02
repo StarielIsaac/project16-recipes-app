@@ -5,8 +5,7 @@ import { IoMdLink } from 'react-icons/io';
 import shareIcon from '../images/shareIcon.svg';
 import blackHeartIcon from '../images/blackHeartIcon.svg';
 
-function LikeNShareButtons(props) {
-  const { index, id, type } = props;
+function LikeNShareButtons({ index, id, type }) {
   const [clickEvent, setClickEvent] = useState({});
   const [isCopied, setIsCopied] = useState(false);
   const [path, setPath] = useState('');
@@ -17,11 +16,8 @@ function LikeNShareButtons(props) {
   const timer = 500;
   copyButton.on('success', (e) => {
     e.clearSelection();
-
     setIsCopied(true);
-    setTimeout(() => {
-      setIsCopied(false);
-    }, timer);
+    setTimeout(() => { setIsCopied(false); }, timer);
   });
 
   const cinco = 5;
@@ -46,20 +42,10 @@ function LikeNShareButtons(props) {
         data-testid={ `${index}-horizontal-share-btn` }
         id="copy-button"
         onClick={ (e) => {
-          if (type === 'Drink') {
-            console.log(e);
-            setClickEvent(e);
-            setPath(`http://localhost:3000/drinks/${id}`);
-          } if (type === 'Meal') {
-            setClickEvent(e);
-            setPath(`http://localhost:3000/meals/${id}`);
-          }
+          setClickEvent(e);
+          setPath(`http://localhost:3000/${type === 'Drink' ? 'drinks' : 'meals'}/${id}`);
         } }
-        style={ {
-          borderRadius: '100%',
-          padding: '8px',
-          backgroundColor: 'lightblue',
-        } }
+        style={ { borderRadius: '100%', padding: '8px', backgroundColor: 'lightblue' } }
       >
         <img
           src={ shareIcon }

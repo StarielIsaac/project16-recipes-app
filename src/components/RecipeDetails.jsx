@@ -7,6 +7,7 @@ import { fetchRecommendationsDrinks,
 
 function RecipeDetails(props) {
   const maxRecipes = 6;
+  const INITIAL_BUTTON_NAME = 'Start Recipe';
 
   const { setDrinksRecommendations, mealsRecommendations,
     drinksRecommendations, setMealsRecommendations } = useContext(RecommendationsContext);
@@ -71,7 +72,7 @@ function RecipeDetails(props) {
     }
   };
 
-  useEffect(() => {
+  const checkedKeyAndItemId = () => {
     if (recipeDetailsRender.length > 0 && recipeDetailsRender[0].idMeal) {
       setChave('Meals');
       setIdItem(recipeDetailsRender[0].idMeal);
@@ -81,12 +82,23 @@ function RecipeDetails(props) {
       setChave('Drinks');
       setIdItem(recipeDetailsRender[0].idDrink);
     }
-  }, [recipeDetailsRender]);
+  };
 
   const checkedButtonName = () => {
+    checkedKeyAndItemId();
     const progressRecipes = JSON.parse(localStorage.getItem('inProgressRecipes')) || [];
+    if (chave !== '' && !progressRecipes[chave]) {
+      return setNameButton(INITIAL_BUTTON_NAME);
+    }
     if (progressRecipes[chave] && !progressRecipes[chave][idItem]) {
-      setNameButton('Start Recipe');
+      return setNameButton(INITIAL_BUTTON_NAME);
+    }
+  };
+
+  const checkedRouterPush = () => {
+    const itemRoute = chave.toLocaleLowerCase();
+    if (nameButton === INITIAL_BUTTON_NAME) {
+      history.push(`/${itemRoute}/${idItem}/in-progress`);
     }
   };
 
@@ -100,6 +112,7 @@ function RecipeDetails(props) {
         },
       },
     ));
+    checkedRouterPush();
     checkedButtonName();
   };
 
@@ -126,6 +139,7 @@ function RecipeDetails(props) {
   }, [recipeDetailsRender]);
 
   useEffect(() => {
+    checkedKeyAndItemId();
     checkedButtonName();
   });
 
@@ -199,7 +213,6 @@ function RecipeDetails(props) {
         data-testid="start-recipe-btn"
         className="start-button"
         onClick={ setRecipesStorage }
-        value={ nameButton }
       >
         {nameButton}
       </button>

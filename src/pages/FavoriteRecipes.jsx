@@ -3,37 +3,48 @@ import { useEffect, useContext } from 'react';
 import Header from '../components/Header';
 import LikeNShareButtons from '../components/LikeNShareButtons';
 import FavContext from '../context/FavContext';
-import newMock from '../services/MockRandomDrink';
 
 function FavoriteRecipes() {
   const { dataFavorites, setDataFavorites } = useContext(FavContext);
+  const stored = localStorage.getItem('favoriteRecipes');
+  const storedRecipes = JSON.parse(stored);
 
   useEffect(() => {
-    // const stored = localStorage.getItem('favoriteRecipes');
-    // const data = JSON.parse(stored);
-    setDataFavorites(newMock);
+    setDataFavorites(storedRecipes);
   }, []);
+
+  const filterByType = (typeParam) => {
+    const filtered = storedRecipes
+      .filter(({ type }) => type === typeParam);
+
+    setDataFavorites(filtered);
+  };
 
   return (
     <div>
       <Header title="Favorite Recipes" />
-      <button
-        type="button"
-        data-testid="filter-by-all-btn"
-      >
-        All
-      </button>
+      <br />
+      <br />
       <button
         type="button"
         data-testid="filter-by-meal-btn"
+        onClick={ () => filterByType('Meal') }
       >
         Meals
       </button>
       <button
         type="button"
         data-testid="filter-by-drink-btn"
+        onClick={ () => filterByType('Drink') }
       >
         Drinks
+      </button>
+      <button
+        type="button"
+        data-testid="filter-by-all-btn"
+        onClick={ () => setDataFavorites(storedRecipes) }
+      >
+        All
       </button>
       <br />
       <br />

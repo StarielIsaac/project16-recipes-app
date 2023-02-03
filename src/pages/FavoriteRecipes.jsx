@@ -1,5 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useContext } from 'react';
+import { Link } from 'react-router-dom';
 import Header from '../components/Header';
 import LikeNShareButtons from '../components/LikeNShareButtons';
 import FavContext from '../context/FavContext';
@@ -51,21 +52,29 @@ function FavoriteRecipes() {
       <br />
       {dataFavorites.map((recipe, index) => (
         <div key={ recipe.id }>
-          <img
-            src={ recipe.image }
-            alt={ recipe.name }
-            data-testid={ `${index}-horizontal-image"` }
-            width="250px"
-            style={ { borderRadius: '10%' } }
-          />
-          <br />
-          <br />
-          <p
-            name="HorizontalName"
-            data-testid={ `${index}-horizontal-name` }
+          <Link
+            to={ `/${recipe.type.toLowerCase()}s/${recipe.id}` }
           >
-            {`${recipe.name}`}
-          </p>
+            <img
+              src={ recipe.image }
+              alt={ recipe.name }
+              data-testid={ `${index}-horizontal-image"` }
+              width="250px"
+              style={ { borderRadius: '10%' } }
+            />
+          </Link>
+          <br />
+          <br />
+          <Link
+            to={ `/${recipe.type.toLowerCase()}s/${recipe.id}` }
+          >
+            <h3
+              name="HorizontalName"
+              data-testid={ `${index}-horizontal-name` }
+            >
+              {`${recipe.name}`}
+            </h3>
+          </Link>
           <p
             name="HorizontalTopText"
             data-testid={ `${index}-horizontal-top-text` }

@@ -229,7 +229,7 @@ const newMock = mockItens.favs.map(({ idDrink, idMeal, strMeal, strMealThumb,
   };
 });
 
-localStorage.clear();
+// localStorage.clear();
 localStorage.setItem('favoriteRecipes', JSON.stringify(newMock));
 
 export default newMock;

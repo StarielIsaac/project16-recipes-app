@@ -29,7 +29,7 @@ function LikeNShareButtons({ index, id, type }) {
     const newData = dataFavorites.filter((recipe) => recipe.id !== id);
 
     setDataFavorites(newData);
-    localStorage.clear();
+    // localStorage.clear();
     localStorage.setItem('favoriteRecipes', JSON.stringify(newData));
   };
 

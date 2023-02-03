@@ -9,7 +9,6 @@ import RecipesProvider from './context/RecipesProvider';
 import FavProvider from './context/FavProvider';
 import RecommendationsProvider from './context/RecommendationsProvider';
 
-
 ReactDOM
   .createRoot(document.getElementById('root'))
   .render(
@@ -17,9 +16,9 @@ ReactDOM
       <HeaderProvider>
         <RecipesProvider>
           <RecommendationsProvider>
-           <FavProvider>
-            <App />
-           </FavProvider>
+            <FavProvider>
+              <App />
+            </FavProvider>
           </RecommendationsProvider>
         </RecipesProvider>
       </HeaderProvider>

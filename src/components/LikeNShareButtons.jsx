@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useContext } from 'react';
 import PropTypes from 'prop-types';
-import Clipboard from 'clipboard';
+import clipboardCopy from 'clipboard-copy';
 import shareIcon from '../images/shareIcon.svg';
 import blackHeartIcon from '../images/blackHeartIcon.svg';
 import FavContext from '../context/FavContext';
@@ -10,16 +10,11 @@ function LikeNShareButtons({ index, id, type }) {
   const { dataFavorites, setDataFavorites } = useContext(FavContext);
   const [clickEvent, setClickEvent] = useState({});
   const [isCopied, setIsCopied] = useState(false);
-  const [path, setPath] = useState('');
-  const copyButton = new Clipboard('#copy-button', {
-    text: () => path });
 
   const timer = 500;
-  copyButton.on('success', (e) => {
-    e.clearSelection();
-
+  const disabledLinkCopied = () => {
     setTimeout(() => { setIsCopied(false); }, timer);
-  });
+  };
 
   const removeRecipe = () => {
     const newData = dataFavorites.filter((recipe) => recipe.id !== id);
@@ -60,8 +55,9 @@ function LikeNShareButtons({ index, id, type }) {
         src={ shareIcon }
         onClick={ (e) => {
           setIsCopied(true);
-          setPath(`http://localhost:3000/${type === 'drink' ? 'drinks' : 'meals'}/${id}`);
+          clipboardCopy(`http://localhost:3000/${type === 'drink' ? 'drinks' : 'meals'}/${id}`);
           setClickEvent(e);
+          disabledLinkCopied();
         } }
         style={ {
           borderRadius: '100%',

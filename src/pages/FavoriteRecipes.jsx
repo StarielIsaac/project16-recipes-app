@@ -1,15 +1,16 @@
-import { useEffect, useState } from 'react';
+/* eslint-disable react-hooks/exhaustive-deps */
+import { useEffect, useContext } from 'react';
 import Header from '../components/Header';
-import newMock from '../services/MockRandomDrink';
 import LikeNShareButtons from '../components/LikeNShareButtons';
+import FavContext from '../context/FavContext';
+import newMock from '../services/MockRandomDrink';
 
 function FavoriteRecipes() {
-  const [dataFavorites, setDataFavorites] = useState([]);
+  const { dataFavorites, setDataFavorites } = useContext(FavContext);
 
   useEffect(() => {
     // const stored = localStorage.getItem('favoriteRecipes');
     // const data = JSON.parse(stored);
-
     setDataFavorites(newMock);
   }, []);
 

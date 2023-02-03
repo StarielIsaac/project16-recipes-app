@@ -1,11 +1,14 @@
-import React, { useState } from 'react';
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, { useState, useContext } from 'react';
 import PropTypes from 'prop-types';
 import Clipboard from 'clipboard';
 import { IoMdLink } from 'react-icons/io';
 import shareIcon from '../images/shareIcon.svg';
 import blackHeartIcon from '../images/blackHeartIcon.svg';
+import FavContext from '../context/FavContext';
 
 function LikeNShareButtons({ index, id, type }) {
+  const { dataFavorites, setDataFavorites } = useContext(FavContext);
   const [clickEvent, setClickEvent] = useState({});
   const [isCopied, setIsCopied] = useState(false);
   const [path, setPath] = useState('');
@@ -15,10 +18,19 @@ function LikeNShareButtons({ index, id, type }) {
 
   const timer = 500;
   copyButton.on('success', (e) => {
+    setClickEvent(e);
     e.clearSelection();
     setIsCopied(true);
     setTimeout(() => { setIsCopied(false); }, timer);
   });
+
+  const removeRecipe = () => {
+    const newData = dataFavorites.filter((recipe) => recipe.id !== id);
+
+    setDataFavorites(newData);
+    localStorage.clear();
+    localStorage.setItem('favoriteRecipes', JSON.stringify(newData));
+  };
 
   const cinco = 5;
   const vinteECinco = 25;
@@ -29,6 +41,7 @@ function LikeNShareButtons({ index, id, type }) {
         type="button"
         data-testid={ `${index}-horizontal-favorite-btn` }
         style={ { borderRadius: '100%', padding: '8px', backgroundColor: '#ff6e5e' } }
+        onClick={ () => removeRecipe() }
       >
         <img
           src={ blackHeartIcon }
@@ -41,10 +54,7 @@ function LikeNShareButtons({ index, id, type }) {
         type="button"
         data-testid={ `${index}-horizontal-share-btn` }
         id="copy-button"
-        onClick={ (e) => {
-          setClickEvent(e);
-          setPath(`http://localhost:3000/${type === 'Drink' ? 'drinks' : 'meals'}/${id}`);
-        } }
+        onClick={ () => setPath(`http://localhost:3000/${type === 'Drink' ? 'drinks' : 'meals'}/${id}`) }
         style={ { borderRadius: '100%', padding: '8px', backgroundColor: 'lightblue' } }
       >
         <img

@@ -2,7 +2,6 @@
 import React, { useState, useContext } from 'react';
 import PropTypes from 'prop-types';
 import Clipboard from 'clipboard';
-import { IoMdLink } from 'react-icons/io';
 import shareIcon from '../images/shareIcon.svg';
 import blackHeartIcon from '../images/blackHeartIcon.svg';
 import FavContext from '../context/FavContext';
@@ -18,9 +17,11 @@ function LikeNShareButtons({ index, id, type }) {
 
   const timer = 500;
   copyButton.on('success', (e) => {
-    setClickEvent(e);
+    console.log(e);
     e.clearSelection();
+
     setIsCopied(true);
+
     setTimeout(() => { setIsCopied(false); }, timer);
   });
 
@@ -40,7 +41,12 @@ function LikeNShareButtons({ index, id, type }) {
       <button
         type="button"
         data-testid={ `${index}-horizontal-favorite-btn` }
-        style={ { borderRadius: '100%', padding: '8px', backgroundColor: '#ff6e5e' } }
+        style={ {
+          borderRadius: '100%',
+          padding: '8px',
+          backgroundColor: '#ff6e5e',
+          border: 'none',
+        } }
         onClick={ () => removeRecipe() }
       >
         <img
@@ -54,8 +60,16 @@ function LikeNShareButtons({ index, id, type }) {
         type="button"
         data-testid={ `${index}-horizontal-share-btn` }
         id="copy-button"
-        onClick={ () => setPath(`http://localhost:3000/${type === 'Drink' ? 'drinks' : 'meals'}/${id}`) }
-        style={ { borderRadius: '100%', padding: '8px', backgroundColor: 'lightblue' } }
+        onClick={ (e) => {
+          setClickEvent(e);
+          setPath(`http://localhost:3000/${type === 'Drink' ? 'drinks' : 'meals'}/${id}`);
+        } }
+        style={ {
+          borderRadius: '100%',
+          padding: '8px',
+          backgroundColor: 'lightblue',
+          border: 'none',
+        } }
       >
         <img
           src={ shareIcon }
@@ -77,8 +91,8 @@ function LikeNShareButtons({ index, id, type }) {
             left: clickEvent ? clickEvent.pageX + vinteECinco : 0,
           } }
         >
-          <IoMdLink />
-          Link copied!
+          {`Link 
+           copied!`}
         </div>
       ) }
     </div>

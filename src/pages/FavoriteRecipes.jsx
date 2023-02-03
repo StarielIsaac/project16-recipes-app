@@ -29,14 +29,14 @@ function FavoriteRecipes() {
       <button
         type="button"
         data-testid="filter-by-meal-btn"
-        onClick={ () => filterByType('Meal') }
+        onClick={ () => filterByType('meal') }
       >
         Meals
       </button>
       <button
         type="button"
         data-testid="filter-by-drink-btn"
-        onClick={ () => filterByType('Drink') }
+        onClick={ () => filterByType('drink') }
       >
         Drinks
       </button>
@@ -50,7 +50,7 @@ function FavoriteRecipes() {
       <br />
       <br />
       <br />
-      {dataFavorites.map((recipe, index) => (
+      {dataFavorites && dataFavorites.map((recipe, index) => (
         <div key={ recipe.id }>
           <Link
             to={ `/${recipe.type.toLowerCase()}s/${recipe.id}` }
@@ -58,7 +58,7 @@ function FavoriteRecipes() {
             <img
               src={ recipe.image }
               alt={ recipe.name }
-              data-testid={ `${index}-horizontal-image"` }
+              data-testid={ `${index}-horizontal-image` }
               width="250px"
               style={ { borderRadius: '10%' } }
             />

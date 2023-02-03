@@ -1,6 +1,8 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { withRouter } from 'react-router-dom';
 import RecommendationsContext from '../context/RecommendationsContext';
+import { setFavoriteRecipesStorage,
+  setRecipesStorage } from '../helpers/SetStorageFunctions';
 import { fetchDetailsDrinks, fetchDetailstMeals } from '../services/ApiRecipeDetails';
 import { fetchRecommendationsDrinks,
   fetchRecommendationsMeals } from '../services/Apirecommendations';
@@ -100,16 +102,8 @@ function RecipeDetails(props) {
     }
   };
 
-  const setRecipesStorage = () => {
-    const progressRecipes = JSON.parse(localStorage.getItem('inProgressRecipes')) || [];
-    localStorage.setItem('inProgressRecipes', JSON.stringify(
-      { ...progressRecipes,
-        [chave]: {
-          ...progressRecipes[chave],
-          [idItem]: recipeIngredients,
-        },
-      },
-    ));
+  const teste = () => {
+    setRecipesStorage(chave, idItem, recipeIngredients);
     checkedButtonName();
   };
 
@@ -218,7 +212,7 @@ function RecipeDetails(props) {
         type="button"
         data-testid="start-recipe-btn"
         className="start-button"
-        onClick={ setRecipesStorage }
+        onClick={ teste }
       >
         {nameButton}
       </button>
@@ -234,7 +228,7 @@ function RecipeDetails(props) {
         type="button"
         data-testid="favorite-btn"
         className="favorite-btn"
-        // onClick={} "vamos precisar em requisitos futuros"
+        onClick={ () => setFavoriteRecipesStorage(recipeDetailsRender) }
       >
         Favoritar
       </button>

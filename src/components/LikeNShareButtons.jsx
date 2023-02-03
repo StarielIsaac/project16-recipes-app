@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useContext } from 'react';
 import PropTypes from 'prop-types';
-import Clipboard from 'clipboard';
+import clipboardCopy from 'clipboard-copy';
 import shareIcon from '../images/shareIcon.svg';
 import blackHeartIcon from '../images/blackHeartIcon.svg';
 import FavContext from '../context/FavContext';
@@ -10,20 +10,11 @@ function LikeNShareButtons({ index, id, type }) {
   const { dataFavorites, setDataFavorites } = useContext(FavContext);
   const [clickEvent, setClickEvent] = useState({});
   const [isCopied, setIsCopied] = useState(false);
-  const [path, setPath] = useState('');
-
-  const copyButton = new Clipboard('#copy-button', {
-    text: () => path });
 
   const timer = 500;
-  copyButton.on('success', (e) => {
-    console.log(e);
-    e.clearSelection();
-
-    setIsCopied(true);
-
+  const disabledLinkCopied = () => {
     setTimeout(() => { setIsCopied(false); }, timer);
-  });
+  };
 
   const removeRecipe = () => {
     const newData = dataFavorites.filter((recipe) => recipe.id !== id);
@@ -41,6 +32,7 @@ function LikeNShareButtons({ index, id, type }) {
       <button
         type="button"
         data-testid={ `${index}-horizontal-favorite-btn` }
+        src={ blackHeartIcon }
         style={ {
           borderRadius: '100%',
           padding: '8px',
@@ -60,9 +52,12 @@ function LikeNShareButtons({ index, id, type }) {
         type="button"
         data-testid={ `${index}-horizontal-share-btn` }
         id="copy-button"
+        src={ shareIcon }
         onClick={ (e) => {
+          setIsCopied(true);
+          clipboardCopy(`http://localhost:3000/${type === 'drink' ? 'drinks' : 'meals'}/${id}`);
           setClickEvent(e);
-          setPath(`http://localhost:3000/${type === 'Drink' ? 'drinks' : 'meals'}/${id}`);
+          disabledLinkCopied();
         } }
         style={ {
           borderRadius: '100%',
@@ -91,8 +86,7 @@ function LikeNShareButtons({ index, id, type }) {
             left: clickEvent ? clickEvent.pageX + vinteECinco : 0,
           } }
         >
-          {`Link 
-           copied!`}
+          Link copied!
         </div>
       ) }
     </div>

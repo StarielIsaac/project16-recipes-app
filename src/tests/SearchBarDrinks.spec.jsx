@@ -6,7 +6,6 @@ import HeaderProvider from '../context/HeaderProvider';
 import App from '../App';
 import RecipesProvider from '../context/RecipesProvider';
 import { renderWithRouter } from '../helpers/renderWith';
-import RecommendationsContext from '../context/RecommendationsContext';
 import RecommendationsProvider from '../context/RecommendationsProvider';
 
 const email = 'trybeteste@hotmail.com';

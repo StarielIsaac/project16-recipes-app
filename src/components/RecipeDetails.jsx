@@ -95,13 +95,13 @@ function RecipeDetails(props) {
       return setNameButton(INITIAL_BUTTON_NAME);
     }
     setNameButton('Continue Recipe');
+    const itemRoute = chave.toLocaleLowerCase();
+    if (nameButton === INITIAL_BUTTON_NAME) {
+      return history.push(`/${itemRoute}/${idItem}/in-progress`);
+    }
   };
 
   const setRecipesStorage = () => {
-    // const itemRoute = chave.toLocaleLowerCase();
-    // if (nameButton === INITIAL_BUTTON_NAME) {
-    //   return history.push(`/${itemRoute}/${idItem}/in-progress`);
-    // }
     const progressRecipes = JSON.parse(localStorage.getItem('inProgressRecipes')) || [];
     localStorage.setItem('inProgressRecipes', JSON.stringify(
       { ...progressRecipes,
@@ -217,8 +217,23 @@ function RecipeDetails(props) {
       >
         {nameButton}
       </button>
+      <button
+        type="button"
+        data-testid="share-btn"
+        className="share-btn"
+        // onClick={} "vamos precisar em requisitos futuros"
+      >
+        Compartilhar
+      </button>
+      <button
+        type="button"
+        data-testid="favorite-btn"
+        className="favorite-btn"
+        // onClick={} "vamos precisar em requisitos futuros"
+      >
+        Favoritar
+      </button>
     </>
-
   );
 }
 

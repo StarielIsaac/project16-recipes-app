@@ -176,7 +176,7 @@
 //       strDrinkAlternate: null,
 //       strCategory: 'Beef',
 //       strArea: 'Irish',
-//       strInstructions: `1\r\n\r\nPlace corned beef in large 
+//       strInstructions: `1\r\n\r\nPlace corned beef in large
 //         pot or Dutch oven and cover with water.
 //         Add the spice packet that came with the corned beef.
 //         Cover pot and bring to a boil, then reduce to a simmer.

@@ -1,9 +1,10 @@
 import { useMemo, useState } from 'react';
 import FavContext from './FavContext';
-import newMock from '../services/MockRandomDrink';
 
 function FavProvider({ children }) {
-  const [dataFavorites, setDataFavorites] = useState(newMock);
+  const stored = localStorage.getItem('favoriteRecipes');
+  const storedRecipes = JSON.parse(stored);
+  const [dataFavorites, setDataFavorites] = useState(storedRecipes);
 
   const values = useMemo(() => ({
     dataFavorites, setDataFavorites,

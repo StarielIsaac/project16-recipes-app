@@ -11,16 +11,12 @@ function LikeNShareButtons({ index, id, type }) {
   const [clickEvent, setClickEvent] = useState({});
   const [isCopied, setIsCopied] = useState(false);
   const [path, setPath] = useState('');
-
   const copyButton = new Clipboard('#copy-button', {
     text: () => path });
 
   const timer = 500;
   copyButton.on('success', (e) => {
-    console.log(e);
     e.clearSelection();
-
-    setIsCopied(true);
 
     setTimeout(() => { setIsCopied(false); }, timer);
   });
@@ -41,6 +37,7 @@ function LikeNShareButtons({ index, id, type }) {
       <button
         type="button"
         data-testid={ `${index}-horizontal-favorite-btn` }
+        src={ blackHeartIcon }
         style={ {
           borderRadius: '100%',
           padding: '8px',
@@ -60,9 +57,11 @@ function LikeNShareButtons({ index, id, type }) {
         type="button"
         data-testid={ `${index}-horizontal-share-btn` }
         id="copy-button"
+        src={ shareIcon }
         onClick={ (e) => {
+          setIsCopied(true);
+          setPath(`http://localhost:3000/${type === 'drink' ? 'drinks' : 'meals'}/${id}`);
           setClickEvent(e);
-          setPath(`http://localhost:3000/${type === 'Drink' ? 'drinks' : 'meals'}/${id}`);
         } }
         style={ {
           borderRadius: '100%',
@@ -91,8 +90,7 @@ function LikeNShareButtons({ index, id, type }) {
             left: clickEvent ? clickEvent.pageX + vinteECinco : 0,
           } }
         >
-          {`Link 
-           copied!`}
+          Link copied!
         </div>
       ) }
     </div>

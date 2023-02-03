@@ -50,7 +50,7 @@ function FavoriteRecipes() {
       <br />
       <br />
       <br />
-      {dataFavorites.map((recipe, index) => (
+      {dataFavorites && dataFavorites.map((recipe, index) => (
         <div key={ recipe.id }>
           <Link
             to={ `/${recipe.type.toLowerCase()}s/${recipe.id}` }

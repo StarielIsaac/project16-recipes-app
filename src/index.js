@@ -7,6 +7,8 @@ import * as serviceWorker from './serviceWorker';
 import HeaderProvider from './context/HeaderProvider';
 import RecipesProvider from './context/RecipesProvider';
 import FavProvider from './context/FavProvider';
+import RecommendationsProvider from './context/RecommendationsProvider';
+
 
 ReactDOM
   .createRoot(document.getElementById('root'))
@@ -14,9 +16,11 @@ ReactDOM
     <BrowserRouter>
       <HeaderProvider>
         <RecipesProvider>
-          <FavProvider>
+          <RecommendationsProvider>
+           <FavProvider>
             <App />
-          </FavProvider>
+           </FavProvider>
+          </RecommendationsProvider>
         </RecipesProvider>
       </HeaderProvider>
     </BrowserRouter>,

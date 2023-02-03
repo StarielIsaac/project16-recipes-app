@@ -6,6 +6,7 @@ import HeaderProvider from '../context/HeaderProvider';
 import App from '../App';
 import RecipesProvider from '../context/RecipesProvider';
 import { renderWithRouter } from '../helpers/renderWith';
+import RecommendationsProvider from '../context/RecommendationsProvider';
 
 const email = 'trybeteste@hotmail.com';
 const senha = '12345678';
@@ -15,6 +16,8 @@ describe('Testes das requisições das Apis', () => {
   global.fetch.mockResolvedValue({
     json: jest.fn().mockResolvedValue({ meals: [] }),
   });
+
+  window.alert = jest.fn;
 
   test('Testando a requisição da Api meals/ingredient', async () => {
     render(
@@ -185,7 +188,9 @@ describe('Testes das requisições das Apis', () => {
     const { history } = renderWithRouter(
       <HeaderProvider>
         <RecipesProvider>
-          <App />
+          <RecommendationsProvider>
+            <App />
+          </RecommendationsProvider>
         </RecipesProvider>
       </HeaderProvider>
       ,

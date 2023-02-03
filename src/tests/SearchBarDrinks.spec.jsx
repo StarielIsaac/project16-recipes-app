@@ -6,6 +6,8 @@ import HeaderProvider from '../context/HeaderProvider';
 import App from '../App';
 import RecipesProvider from '../context/RecipesProvider';
 import { renderWithRouter } from '../helpers/renderWith';
+import RecommendationsContext from '../context/RecommendationsContext';
+import RecommendationsProvider from '../context/RecommendationsProvider';
 
 const email = 'trybeteste@hotmail.com';
 const senha = '12345678';
@@ -15,6 +17,8 @@ describe('Testes das requisições das Apis', () => {
   global.fetch.mockResolvedValue({
     json: jest.fn().mockResolvedValue({ drinks: [] }),
   });
+
+  window.alert = jest.fn;
 
   test('Testando a requisição da Api Drinks/ingredient', async () => {
     render(
@@ -152,15 +156,19 @@ describe('Testes das requisições das Apis', () => {
   test('verifica se a rota do pathname é alterada', async () => {
     jest.spyOn(global, 'fetch');
     global.fetch.mockResolvedValue({
-      json: jest.fn().mockResolvedValue({ drinks: [{ idDrink: 89532 }] }),
+      json: jest.fn().mockResolvedValue({ drinks: [{ idDrink: 178329 }] }),
     });
 
     const { history } = renderWithRouter(
+
       <HeaderProvider>
         <RecipesProvider>
-          <App />
+          <RecommendationsProvider>
+            <App />
+          </RecommendationsProvider>
         </RecipesProvider>
       </HeaderProvider>
+
       ,
     );
 
@@ -177,9 +185,11 @@ describe('Testes das requisições das Apis', () => {
     const drinkROute = screen.getByRole('img', {
       name: /drink icon/i,
     });
+
     userEvent.click(drinkROute);
 
-    const FirstLetter = screen.getByText(/first letter:/i);
+    await new Promise((push) => { setTimeout(push, 100); });
+    const btnName = screen.getByText(/name:/i);
     const btnBusca = screen.getByRole('button', {
       name: /buscar/i,
     });
@@ -189,11 +199,10 @@ describe('Testes das requisições das Apis', () => {
 
     userEvent.click(imgSearch);
     const inputSearchEl = screen.getByRole('textbox');
-    userEvent.type(inputSearchEl, 'u');
-    userEvent.click(FirstLetter);
+    userEvent.type(inputSearchEl, 'Captain Kidd');
+    userEvent.click(btnName);
     userEvent.click(btnBusca);
-
     await new Promise((push) => { setTimeout(push, 100); });
-    expect(history.location.pathname).toBe('/drinks/89532');
+    expect(history.location.pathname).toBe('/drinks/178329');
   });
 });

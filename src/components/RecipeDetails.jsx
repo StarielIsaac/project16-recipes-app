@@ -86,7 +86,6 @@ function RecipeDetails(props) {
 
   const checkedButtonName = () => {
     const progressRecipes = JSON.parse(localStorage.getItem('inProgressRecipes')) || [];
-    console.log(progressRecipes);
     if (chave !== '' && progressRecipes[chave] === undefined) {
       return setNameButton(INITIAL_BUTTON_NAME);
     }
@@ -115,10 +114,16 @@ function RecipeDetails(props) {
   };
 
   useEffect(() => {
-    if (mealsRecommendations.length > 0 || drinksRecommendations.length > 0) {
+    if (mealsRecommendations && mealsRecommendations.length > 0) {
       filterRecommendations();
     }
-  }, [mealsRecommendations, drinksRecommendations]);
+  }, [mealsRecommendations]);
+
+  useEffect(() => {
+    if (drinksRecommendations && drinksRecommendations.length > 0) {
+      filterRecommendations();
+    }
+  }, [drinksRecommendations]);
 
   useEffect(() => {
     if (drinksRecommendations.length === 0 || mealsRecommendations.length === 0) {

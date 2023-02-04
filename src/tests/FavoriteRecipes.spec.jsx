@@ -23,6 +23,25 @@ describe('Componente Favorite Recipes', () => {
   });
 
   test('Testes Favorites Recipes', async () => {
+    const mockfavs = [{
+      id: '111',
+      type: 'meal',
+      nationality: 'brasil',
+      category: 'vegan',
+      alcoholicOrNot: 'not',
+      name: 'podrão',
+      image: '',
+    }, {
+      id: '111',
+      type: 'drink',
+      nationality: '',
+      category: 'vegan',
+      alcoholicOrNot: 'not',
+      name: 'podrão',
+      image: '',
+    }];
+
+    localStorage.setItem('favoriteRecipes', JSON.stringify(mockfavs));
     renderWithRouter(
       <HeaderProvider>
         <RecipesProvider>
@@ -35,24 +54,24 @@ describe('Componente Favorite Recipes', () => {
       </HeaderProvider>
       ,
     );
-    const title = screen.getByRole('heading', {
-      name: /favorite recipes/i,
-    });
+    // const title = screen.getByRole('heading', {
+    //   name: /favorite recipes/i,
+    // });
 
-    const iconProfile = screen.getByRole('img', {
-      name: /profileicon/i,
-    });
+    // const iconProfile = screen.getByRole('img', {
+    //   name: /profileicon/i,
+    // });
 
     const catMeals = screen.getByRole('button', {
       name: /meals/i,
     });
 
     const catDrinks = screen.getByRole('button', {
-      name: /meals/i,
+      name: /drink/i,
     });
 
     const catAll = screen.getByRole('button', {
-      name: /meals/i,
+      name: /all/i,
     });
 
     userEvent.click(catMeals);

@@ -8,7 +8,7 @@ import FavContext from '../context/FavContext';
 function FavoriteRecipes() {
   const { dataFavorites, setDataFavorites } = useContext(FavContext);
   const stored = localStorage.getItem('favoriteRecipes');
-  const storedRecipes = JSON.parse(stored) || [];
+  const storedRecipes = JSON.parse(stored);
 
   useEffect(() => {
     setDataFavorites(storedRecipes);

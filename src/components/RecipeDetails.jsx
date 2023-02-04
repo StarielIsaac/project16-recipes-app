@@ -1,15 +1,20 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { withRouter } from 'react-router-dom';
 import RecommendationsContext from '../context/RecommendationsContext';
-import { setFavoriteRecipesStorage,
-  setRecipesStorage } from '../helpers/SetStorageFunctions';
+import { setRecipesStorage } from '../helpers/SetStorageFunctions';
 import { fetchDetailsDrinks, fetchDetailstMeals } from '../services/ApiRecipeDetails';
 import { fetchRecommendationsDrinks,
   fetchRecommendationsMeals } from '../services/Apirecommendations';
-import blackHeartIcon from '../images/blackHeartIcon.svg';
-import whiteHeartIcon from '../images/whiteHeartIcon.svg';
+import LikeNShareButtons from './LikeNShareButtons';
+import FavContext from '../context/FavContext';
 
 function RecipeDetails(props) {
+  const { setFavorite } = useContext(FavContext);
+
+  useEffect(() => {
+    setFavorite(true);
+  }, []);
+
   const maxRecipes = 6;
   const INITIAL_BUTTON_NAME = 'Start Recipe';
 
@@ -184,6 +189,11 @@ function RecipeDetails(props) {
             height="350"
             title={ recipe.strMeal || recipe.strDrink }
           />
+          <LikeNShareButtons
+            index={ index }
+            id={ recipe.idMeal || recipe.idDrink }
+            type={ recipe.idMeal ? 'meal' : 'drink' }
+          />
         </div>
       ))}
       <div className="scroll">
@@ -208,26 +218,6 @@ function RecipeDetails(props) {
         onClick={ teste }
       >
         {nameButton}
-      </button>
-      <button
-        type="button"
-        data-testid="share-btn"
-        className="share-btn"
-        // onClick={} "vamos precisar em requisitos futuros"
-      >
-        Compartilhar
-      </button>
-      <button
-        type="button"
-        data-testid="favorite-btn"
-        className="favorite-btn"
-        onClick={
-          () => setFavoriteRecipesStorage(recipeDetailsRender, setShowHeart, showHeart)
-        }
-        src={ showHeart ? blackHeartIcon : whiteHeartIcon }
-      >
-        <img src={ showHeart ? blackHeartIcon : whiteHeartIcon } alt="" />
-        Favoritar
       </button>
     </>
   );

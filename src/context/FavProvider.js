@@ -5,10 +5,11 @@ function FavProvider({ children }) {
   const stored = localStorage.getItem('favoriteRecipes');
   const storedRecipes = JSON.parse(stored);
   const [dataFavorites, setDataFavorites] = useState(storedRecipes);
+  const [favorite, setFavorite] = useState(false);
 
   const values = useMemo(() => ({
-    dataFavorites, setDataFavorites,
-  }), [dataFavorites, setDataFavorites]);
+    dataFavorites, setDataFavorites, favorite, setFavorite,
+  }), [dataFavorites, setDataFavorites, favorite, setFavorite]);
 
   return (
     <FavContext.Provider value={ values }>

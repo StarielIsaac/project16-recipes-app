@@ -4,12 +4,17 @@ import PropTypes from 'prop-types';
 import clipboardCopy from 'clipboard-copy';
 import shareIcon from '../images/shareIcon.svg';
 import blackHeartIcon from '../images/blackHeartIcon.svg';
+import whiteHeartIcon from '../images/whiteHeartIcon.svg';
 import FavContext from '../context/FavContext';
+import { setFavoriteRecipesStorage } from '../helpers/SetStorageFunctions';
+import RecommendationsContext from '../context/RecommendationsContext';
 
 function LikeNShareButtons({ index, id, type }) {
   const { dataFavorites, setDataFavorites } = useContext(FavContext);
+  const { recipeDetailsRender } = useContext(RecommendationsContext);
   const [clickEvent, setClickEvent] = useState({});
   const [isCopied, setIsCopied] = useState(false);
+  const { favorite } = useContext(FavContext);
 
   const timer = 500;
   const disabledLinkCopied = () => {
@@ -20,7 +25,6 @@ function LikeNShareButtons({ index, id, type }) {
     const newData = dataFavorites.filter((recipe) => recipe.id !== id);
 
     setDataFavorites(newData);
-    // localStorage.clear();
     localStorage.setItem('favoriteRecipes', JSON.stringify(newData));
   };
 
@@ -31,26 +35,31 @@ function LikeNShareButtons({ index, id, type }) {
     <div>
       <button
         type="button"
-        data-testid={ `${index}-horizontal-favorite-btn` }
-        src={ blackHeartIcon }
+        data-testid={ favorite
+          ? 'favorite-btn'
+          : `${index}-horizontal-favorite-btn` }
+        src={ favorite ? blackHeartIcon : whiteHeartIcon }
         style={ {
           borderRadius: '100%',
           padding: '8px',
           backgroundColor: '#ff6e5e',
           border: 'none',
         } }
-        onClick={ () => removeRecipe() }
+        onClick={ (favorite
+          ? () => setFavoriteRecipesStorage(recipeDetailsRender)
+          : () => removeRecipe()) }
       >
         <img
-          src={ blackHeartIcon }
-          type="image/svg+xml"
-          alt="BlackHeart Icon"
+          type="imge'svg+xml'"
+          alt={ favorite ? 'BlackHeart Icon' : 'WhiteHeart Icon' }
           width="30px"
         />
       </button>
       <button
         type="button"
-        data-testid={ `${index}-horizontal-share-btn` }
+        data-testid={ favorite
+          ? 'share-btn'
+          : `${index}-horizontal-share-btn` }
         id="copy-button"
         src={ shareIcon }
         onClick={ (e) => {

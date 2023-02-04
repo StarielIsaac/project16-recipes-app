@@ -10,8 +10,21 @@ export const setRecipesStorage = (chave, idItem, recipeIngredients) => {
   ));
 };
 
-export const setFavoriteRecipesStorage = (recipeDetailsRender) => {
-  console.log(recipeDetailsRender);
+const exemplo1 = (id, setShowHeart, showHeart) => {
+  const favoriteRecipes = JSON.parse(localStorage.getItem('favoriteRecipes')) || [];
+  if (showHeart) {
+    const newFavoriteRecipes = favoriteRecipes.find((ele) => ele.id !== id) || [];
+    localStorage.setItem('favoriteRecipes', JSON.stringify(newFavoriteRecipes));
+  }
+  setShowHeart(!showHeart);
+};
+
+export const setFavoriteRecipesStorage = (
+  recipeDetailsRender,
+  setShowHeart,
+  showHeart,
+) => {
+  // console.log(recipeDetailsRender);
   let id;
   let type;
   let nationality;
@@ -59,4 +72,5 @@ export const setFavoriteRecipesStorage = (recipeDetailsRender) => {
       },
     ],
   ));
+  exemplo1(id, setShowHeart, showHeart);
 };

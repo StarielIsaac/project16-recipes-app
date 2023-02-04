@@ -6,6 +6,8 @@ import { setFavoriteRecipesStorage,
 import { fetchDetailsDrinks, fetchDetailstMeals } from '../services/ApiRecipeDetails';
 import { fetchRecommendationsDrinks,
   fetchRecommendationsMeals } from '../services/Apirecommendations';
+import blackHeartIcon from '../images/blackHeartIcon.svg';
+import whiteHeartIcon from '../images/whiteHeartIcon.svg';
 
 function RecipeDetails(props) {
   const maxRecipes = 6;
@@ -19,6 +21,8 @@ function RecipeDetails(props) {
   const [nameButton, setNameButton] = useState('Continue Recipe');
   const [chave, setChave] = useState('');
   const [idItem, setIdItem] = useState('');
+  const [localArray, setlocalArray] = useState([]);
+  const [showHeart, setShowHeart] = useState(false);
 
   const { match: { params: { id } } } = props;
   const { history } = props;
@@ -49,6 +53,11 @@ function RecipeDetails(props) {
     setRecipeIngredients(auxIngredientes);
   };
 
+  const verifica = () => {
+    const verification = localArray.some((el) => el.id === id);
+    setShowHeart(verification);
+  };
+
   const fetchRecommendations = async () => {
     if (history.location.pathname.includes('/meals/')) {
       const recommendations = await fetchRecommendationsDrinks();
@@ -72,6 +81,7 @@ function RecipeDetails(props) {
         .filter((_, index) => index < maxRecipes);
       setRenderRecommendation(recommendations);
     }
+    verifica();
   };
 
   const checkedKeyAndItemId = () => {
@@ -84,6 +94,10 @@ function RecipeDetails(props) {
       setChave('drinks');
       setIdItem(recipeDetailsRender[0].idDrink);
     }
+  };
+
+  const captura = () => {
+    setlocalArray(JSON.parse(localStorage.getItem('favoriteRecipes')) || []);
   };
 
   const checkedButtonName = () => {
@@ -127,6 +141,7 @@ function RecipeDetails(props) {
 
   useEffect(() => {
     fetchDetails();
+    captura();
   }, []);
 
   useEffect(() => {
@@ -228,14 +243,15 @@ function RecipeDetails(props) {
         type="button"
         data-testid="favorite-btn"
         className="favorite-btn"
-        onClick={ () => setFavoriteRecipesStorage(recipeDetailsRender) }
+        onClick={ () => setFavoriteRecipesStorage(recipeDetailsRender, setShowHeart, showHeart) }
+        src={ showHeart ? blackHeartIcon : whiteHeartIcon }
       >
+        <img src={ showHeart ? blackHeartIcon : whiteHeartIcon } alt="" />
         Favoritar
       </button>
     </>
   );
 }
-
 RecipeDetails.propTypes = {}.isRequired;
 
 export default withRouter(RecipeDetails);

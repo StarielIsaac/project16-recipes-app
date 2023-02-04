@@ -21,7 +21,7 @@ function RecipeDetails(props) {
   const [nameButton, setNameButton] = useState('Continue Recipe');
   const [chave, setChave] = useState('');
   const [idItem, setIdItem] = useState('');
-  const [localArray, setlocalArray] = useState([]);
+  const [findArray] = useState(JSON.parse(localStorage.getItem('favoriteRecipes')) || []);
   const [showHeart, setShowHeart] = useState(false);
 
   const { match: { params: { id } } } = props;
@@ -54,7 +54,7 @@ function RecipeDetails(props) {
   };
 
   const verifica = () => {
-    const verification = localArray.some((el) => el.id === id);
+    const verification = findArray.some((el) => el.id === id);
     setShowHeart(verification);
   };
 
@@ -62,8 +62,7 @@ function RecipeDetails(props) {
     if (history.location.pathname.includes('/meals/')) {
       const recommendations = await fetchRecommendationsDrinks();
       setDrinksRecommendations(recommendations.drinks);
-    }
-    if (history.location.pathname.includes('/drinks/')) {
+    } if (history.location.pathname.includes('/drinks/')) {
       const recommendations = await fetchRecommendationsMeals();
       setMealsRecommendations(recommendations.meals);
     }
@@ -74,9 +73,7 @@ function RecipeDetails(props) {
       const recommendations = drinksRecommendations
         .filter((_, index) => index < maxRecipes);
       setRenderRecommendation(recommendations);
-    }
-
-    if (history.location.pathname.includes('/drinks/')) {
+    } if (history.location.pathname.includes('/drinks/')) {
       const recommendations = mealsRecommendations
         .filter((_, index) => index < maxRecipes);
       setRenderRecommendation(recommendations);
@@ -88,25 +85,17 @@ function RecipeDetails(props) {
     if (recipeDetailsRender.length > 0 && recipeDetailsRender[0].idMeal) {
       setChave('meals');
       setIdItem(recipeDetailsRender[0].idMeal);
-    }
-
-    if (recipeDetailsRender.length > 0 && recipeDetailsRender[0].idDrink) {
+    } if (recipeDetailsRender.length > 0 && recipeDetailsRender[0].idDrink) {
       setChave('drinks');
       setIdItem(recipeDetailsRender[0].idDrink);
     }
-  };
-
-  const captura = () => {
-    setlocalArray(JSON.parse(localStorage.getItem('favoriteRecipes')) || []);
   };
 
   const checkedButtonName = () => {
     const progressRecipes = JSON.parse(localStorage.getItem('inProgressRecipes')) || [];
     if (chave !== '' && progressRecipes[chave] === undefined) {
       return setNameButton(INITIAL_BUTTON_NAME);
-    }
-
-    if (progressRecipes[chave] && !progressRecipes[chave][idItem]) {
+    } if (progressRecipes[chave] && !progressRecipes[chave][idItem]) {
       return setNameButton(INITIAL_BUTTON_NAME);
     }
     setNameButton('Continue Recipe');
@@ -134,14 +123,10 @@ function RecipeDetails(props) {
   }, [drinksRecommendations]);
 
   useEffect(() => {
+    fetchDetails();
     if (drinksRecommendations.length === 0 || mealsRecommendations.length === 0) {
       fetchRecommendations();
     }
-  }, []);
-
-  useEffect(() => {
-    fetchDetails();
-    captura();
   }, []);
 
   useEffect(() => {
@@ -159,9 +144,7 @@ function RecipeDetails(props) {
   }, [chave]);
 
   return (
-
     <>
-      <h1>aux</h1>
       { recipeDetailsRender.length > 0 && recipeDetailsRender.map((recipe, index) => (
         <div key={ index }>
           <img
@@ -174,12 +157,8 @@ function RecipeDetails(props) {
           >
             {recipe.strMeal || recipe.strDrink}
           </h1>
-
-          <p
-            data-testid="recipe-category"
-          >
+          <p data-testid="recipe-category">
             {`${recipe.strCategory} - `}
-
             {recipe.strAlcoholic}
           </p>
           <ol>
@@ -207,7 +186,6 @@ function RecipeDetails(props) {
           />
         </div>
       ))}
-
       <div className="scroll">
         {renderRecommendation && renderRecommendation.map((recipe, index) => (
           <div
@@ -243,7 +221,9 @@ function RecipeDetails(props) {
         type="button"
         data-testid="favorite-btn"
         className="favorite-btn"
-        onClick={ () => setFavoriteRecipesStorage(recipeDetailsRender, setShowHeart, showHeart) }
+        onClick={
+          () => setFavoriteRecipesStorage(recipeDetailsRender, setShowHeart, showHeart)
+        }
         src={ showHeart ? blackHeartIcon : whiteHeartIcon }
       >
         <img src={ showHeart ? blackHeartIcon : whiteHeartIcon } alt="" />

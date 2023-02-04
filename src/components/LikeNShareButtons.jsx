@@ -2,13 +2,13 @@
 import React, { useState, useContext, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import clipboardCopy from 'clipboard-copy';
+import { withRouter } from 'react-router-dom';
 import shareIcon from '../images/shareIcon.svg';
 import blackHeartIcon from '../images/blackHeartIcon.svg';
 import whiteHeartIcon from '../images/whiteHeartIcon.svg';
 import FavContext from '../context/FavContext';
 import { setFavoriteRecipesStorage } from '../helpers/SetStorageFunctions';
 import RecommendationsContext from '../context/RecommendationsContext';
-import { withRouter } from 'react-router-dom';
 
 function LikeNShareButtons({ index, id, type, history }) {
   const { dataFavorites, setDataFavorites } = useContext(FavContext);
@@ -120,5 +120,7 @@ LikeNShareButtons.propTypes = {
   type: PropTypes.string.isRequired,
   id: PropTypes.string.isRequired,
 };
+
+LikeNShareButtons.propTypes = {}.isRequired;
 
 export default withRouter(LikeNShareButtons);

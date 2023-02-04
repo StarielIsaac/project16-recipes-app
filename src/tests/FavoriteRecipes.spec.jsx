@@ -8,21 +8,8 @@ import RecommendationsProvider from '../context/RecommendationsProvider';
 import FavoriteRecipes from '../pages/FavoriteRecipes';
 import FavProvider from '../context/FavProvider';
 
-// const email = 'trybeteste@hotmail.com';
-// const senha = '12345678';
-
 describe('Componente Favorite Recipes', () => {
-  jest.spyOn(global, 'fetch');
-  global.fetch.mockResolvedValue({
-    json: jest.fn().mockResolvedValue({ meals: [{
-      idMeal: '52977',
-      strMeal: 'Corba',
-    }, {
-      idMeal: '53987',
-      strMeal: 'arroz' }] }),
-  });
-
-  test('Testes Favorites Recipes', async () => {
+  test('Testes os botoes das categorias', async () => {
     const mockfavs = [{
       id: '111',
       type: 'meal',
@@ -54,14 +41,6 @@ describe('Componente Favorite Recipes', () => {
       </HeaderProvider>
       ,
     );
-    // const title = screen.getByRole('heading', {
-    //   name: /favorite recipes/i,
-    // });
-
-    // const iconProfile = screen.getByRole('img', {
-    //   name: /profileicon/i,
-    // });
-
     const catMeals = screen.getByRole('button', {
       name: /meals/i,
     });
@@ -77,5 +56,12 @@ describe('Componente Favorite Recipes', () => {
     userEvent.click(catMeals);
     userEvent.click(catDrinks);
     userEvent.click(catAll);
+
+    // const btnShare = screen.getByTestId('0-horizontal-share-btn');
+    // const btnHeart = screen.getByTestId('0-horizontal-favorite-btn');
+
+    // window.clipboard;
+    // userEvent.click(btnShare);
+    // userEvent.click(btnHeart);
   });
 });

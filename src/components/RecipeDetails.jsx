@@ -6,28 +6,19 @@ import { fetchDetailsDrinks, fetchDetailstMeals } from '../services/ApiRecipeDet
 import { fetchRecommendationsDrinks,
   fetchRecommendationsMeals } from '../services/Apirecommendations';
 import LikeNShareButtons from './LikeNShareButtons';
-import FavContext from '../context/FavContext';
 
 function RecipeDetails(props) {
-  const { setFavorite } = useContext(FavContext);
-
-  useEffect(() => {
-    setFavorite(true);
-  }, []);
-
   const maxRecipes = 6;
   const INITIAL_BUTTON_NAME = 'Start Recipe';
 
   const { setDrinksRecommendations, mealsRecommendations,
     drinksRecommendations, setMealsRecommendations } = useContext(RecommendationsContext);
-  const [recipeDetailsRender, setDetailsRender] = useState([]);
+  const { recipeDetailsRender, setDetailsRender } = useContext(RecommendationsContext);
   const [recipeIngredients, setRecipeIngredients] = useState(null);
   const [renderRecommendation, setRenderRecommendation] = useState(null);
   const [nameButton, setNameButton] = useState('Continue Recipe');
   const [chave, setChave] = useState('');
   const [idItem, setIdItem] = useState('');
-  const [findArray] = useState(JSON.parse(localStorage.getItem('favoriteRecipes')) || []);
-  const [showHeart, setShowHeart] = useState(false);
 
   const { match: { params: { id } } } = props;
   const { history } = props;
@@ -58,16 +49,12 @@ function RecipeDetails(props) {
     setRecipeIngredients(auxIngredientes);
   };
 
-  const verifica = () => {
-    const verification = findArray.some((el) => el.id === id);
-    setShowHeart(verification);
-  };
-
   const fetchRecommendations = async () => {
     if (history.location.pathname.includes('/meals/')) {
       const recommendations = await fetchRecommendationsDrinks();
       setDrinksRecommendations(recommendations.drinks);
-    } if (history.location.pathname.includes('/drinks/')) {
+    }
+    if (history.location.pathname.includes('/drinks/')) {
       const recommendations = await fetchRecommendationsMeals();
       setMealsRecommendations(recommendations.meals);
     }
@@ -78,19 +65,22 @@ function RecipeDetails(props) {
       const recommendations = drinksRecommendations
         .filter((_, index) => index < maxRecipes);
       setRenderRecommendation(recommendations);
-    } if (history.location.pathname.includes('/drinks/')) {
+    }
+
+    if (history.location.pathname.includes('/drinks/')) {
       const recommendations = mealsRecommendations
         .filter((_, index) => index < maxRecipes);
       setRenderRecommendation(recommendations);
     }
-    verifica();
   };
 
   const checkedKeyAndItemId = () => {
     if (recipeDetailsRender.length > 0 && recipeDetailsRender[0].idMeal) {
       setChave('meals');
       setIdItem(recipeDetailsRender[0].idMeal);
-    } if (recipeDetailsRender.length > 0 && recipeDetailsRender[0].idDrink) {
+    }
+
+    if (recipeDetailsRender.length > 0 && recipeDetailsRender[0].idDrink) {
       setChave('drinks');
       setIdItem(recipeDetailsRender[0].idDrink);
     }
@@ -100,7 +90,9 @@ function RecipeDetails(props) {
     const progressRecipes = JSON.parse(localStorage.getItem('inProgressRecipes')) || [];
     if (chave !== '' && progressRecipes[chave] === undefined) {
       return setNameButton(INITIAL_BUTTON_NAME);
-    } if (progressRecipes[chave] && !progressRecipes[chave][idItem]) {
+    }
+
+    if (progressRecipes[chave] && !progressRecipes[chave][idItem]) {
       return setNameButton(INITIAL_BUTTON_NAME);
     }
     setNameButton('Continue Recipe');
@@ -128,10 +120,13 @@ function RecipeDetails(props) {
   }, [drinksRecommendations]);
 
   useEffect(() => {
-    fetchDetails();
     if (drinksRecommendations.length === 0 || mealsRecommendations.length === 0) {
       fetchRecommendations();
     }
+  }, []);
+
+  useEffect(() => {
+    fetchDetails();
   }, []);
 
   useEffect(() => {
@@ -149,54 +144,70 @@ function RecipeDetails(props) {
   }, [chave]);
 
   return (
+
     <>
-      { recipeDetailsRender.length > 0 && recipeDetailsRender.map((recipe, index) => (
-        <div key={ index }>
-          <img
-            src={ recipe.strImageSource }
-            alt=""
-            data-testid="recipe-photo"
-          />
-          <h1
-            data-testid="recipe-title"
-          >
-            {recipe.strMeal || recipe.strDrink}
-          </h1>
-          <p data-testid="recipe-category">
-            {`${recipe.strCategory} - `}
-            {recipe.strAlcoholic}
-          </p>
-          <ol>
-            {recipeIngredients && recipeIngredients.map((ingredient, i) => (
-              <li
-                data-testid={ `${i}-ingredient-name-and-measure` }
-                key={ i }
-              >
-                {`${Object.keys(ingredient)} - `}
-                {Object.values(ingredient)}
-              </li>
-            ))}
-          </ol>
-          <p
-            data-testid="instructions"
-          >
-            {recipe.strInstructions}
-          </p>
-          <iframe
-            src={ recipe.strYoutube }
-            data-testid="video"
-            width="480"
-            height="350"
-            title={ recipe.strMeal || recipe.strDrink }
-          />
-          <LikeNShareButtons
-            index={ index }
-            id={ recipe.idMeal || recipe.idDrink }
-            type={ recipe.idMeal ? 'meal' : 'drink' }
-          />
-        </div>
-      ))}
+      <h1>aux</h1>
+      { recipeDetailsRender.length > 0 && recipeDetailsRender
+        .map((recipe, index) => (
+          <div key={ index }>
+            <img
+              src={ recipe.strImageSource }
+              alt=""
+              data-testid="recipe-photo"
+            />
+            <h1
+              data-testid="recipe-title"
+            >
+              {recipe.strMeal || recipe.strDrink}
+            </h1>
+
+            <p
+              data-testid="recipe-category"
+            >
+              {`${recipe.strCategory} - `}
+
+              {recipe.strAlcoholic}
+            </p>
+            <ol>
+              {recipeIngredients && recipeIngredients.map((ingredient, i) => (
+                <li
+                  data-testid={ `${i}-ingredient-name-and-measure` }
+                  key={ i }
+                >
+                  {`${Object.keys(ingredient)} - `}
+                  {Object.values(ingredient)}
+                </li>
+              ))}
+            </ol>
+            <p
+              data-testid="instructions"
+            >
+              {recipe.strInstructions}
+            </p>
+            <iframe
+              src={ recipe.strYoutube }
+              data-testid="video"
+              width="480"
+              height="350"
+              title={ recipe.strMeal || recipe.strDrink }
+            />
+            <LikeNShareButtons
+              index={ index }
+              id={ recipe.idMeal || recipe.idDrink }
+              type={ recipe.idMeal ? 'meal' : 'drink' }
+            />
+          </div>
+        ))}
+
       <div className="scroll">
+        <button
+          type="button"
+          data-testid="start-recipe-btn"
+          className="start-button"
+          onClick={ teste }
+        >
+          {nameButton}
+        </button>
         {renderRecommendation && renderRecommendation.map((recipe, index) => (
           <div
             data-testid={ `${index}-recommendation-card` }
@@ -208,20 +219,12 @@ function RecipeDetails(props) {
               {recipe.strMeal || recipe.strDrink}
             </h1>
           </div>
-
         ))}
       </div>
-      <button
-        type="button"
-        data-testid="start-recipe-btn"
-        className="start-button"
-        onClick={ teste }
-      >
-        {nameButton}
-      </button>
     </>
   );
 }
+
 RecipeDetails.propTypes = {}.isRequired;
 
 export default withRouter(RecipeDetails);

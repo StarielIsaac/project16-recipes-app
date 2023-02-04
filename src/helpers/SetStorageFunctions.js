@@ -19,12 +19,8 @@ const exemplo1 = (id, setShowHeart, showHeart) => {
   setShowHeart(!showHeart);
 };
 
-export const setFavoriteRecipesStorage = (
-  recipeDetailsRender,
-  setShowHeart,
-  showHeart,
-) => {
-  // console.log(recipeDetailsRender);
+export const setFavoriteRecipesStorage = (recipeDetailsRender) => {
+  console.log(recipeDetailsRender);
   let id;
   let type;
   let nationality;
@@ -72,5 +68,5 @@ export const setFavoriteRecipesStorage = (
       },
     ],
   ));
-  exemplo1(id, setShowHeart, showHeart);
+  // exemplo1(id, setShowHeart, showHeart);
 };

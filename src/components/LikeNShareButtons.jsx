@@ -34,10 +34,14 @@ function LikeNShareButtons({ index, id, type, history }) {
   };
 
   const removeRecipe = () => {
-    console.log('teste');
     const newData = dataFavorites.filter((recipe) => recipe.id !== id);
     setDataFavorites(newData);
     localStorage.setItem('favoriteRecipes', JSON.stringify(newData));
+  };
+
+  const setFavoriteAndStorage = () => {
+    setFavorite(true);
+    setFavoriteRecipesStorage(recipeDetailsRender);
   };
 
   const cinco = 5;
@@ -51,16 +55,16 @@ function LikeNShareButtons({ index, id, type, history }) {
         data-testid={ !history.location.pathname.includes('favorite')
           ? 'favorite-btn'
           : `${index}-horizontal-favorite-btn` }
-        src={ !favorite ? blackHeartIcon : whiteHeartIcon }
+        src={ favorite ? blackHeartIcon : whiteHeartIcon }
         style={ {
           borderRadius: '100%',
           padding: '8px',
           backgroundColor: '#ff6e5e',
           border: 'none',
         } }
-        onClick={ !favorite
-          ? () => setFavoriteRecipesStorage(recipeDetailsRender)
-          : () => removeRecipe() }
+        onClick={ favorite
+          ? () => removeRecipe()
+          : () => setFavoriteAndStorage() }
       >
         <img
           src={ favorite ? blackHeartIcon : whiteHeartIcon }

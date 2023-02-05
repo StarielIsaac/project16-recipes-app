@@ -4,17 +4,22 @@ import RecommendationsContext from './RecommendationsContext';
 function RecommendationsProvider({ children }) {
   const [mealsRecommendations, setMealsRecommendations] = useState([]);
   const [drinksRecommendations, setDrinksRecommendations] = useState([]);
+  const [recipeDetailsRender, setDetailsRender] = useState([]);
 
   const values = useMemo(() => ({
     mealsRecommendations,
     drinksRecommendations,
+    recipeDetailsRender,
     setMealsRecommendations,
     setDrinksRecommendations,
+    setDetailsRender,
   }), [
     mealsRecommendations,
     drinksRecommendations,
+    recipeDetailsRender,
     setMealsRecommendations,
     setDrinksRecommendations,
+    setDetailsRender,
   ]);
 
   return (

@@ -1,11 +1,11 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { withRouter } from 'react-router-dom';
 import RecommendationsContext from '../context/RecommendationsContext';
-import { setFavoriteRecipesStorage,
-  setRecipesStorage } from '../helpers/SetStorageFunctions';
+import { setRecipesStorage } from '../helpers/SetStorageFunctions';
 import { fetchDetailsDrinks, fetchDetailstMeals } from '../services/ApiRecipeDetails';
 import { fetchRecommendationsDrinks,
   fetchRecommendationsMeals } from '../services/Apirecommendations';
+import LikeNShareButtons from './LikeNShareButtons';
 
 function RecipeDetails(props) {
   const maxRecipes = 6;
@@ -13,7 +13,7 @@ function RecipeDetails(props) {
 
   const { setDrinksRecommendations, mealsRecommendations,
     drinksRecommendations, setMealsRecommendations } = useContext(RecommendationsContext);
-  const [recipeDetailsRender, setDetailsRender] = useState([]);
+  const { recipeDetailsRender, setDetailsRender } = useContext(RecommendationsContext);
   const [recipeIngredients, setRecipeIngredients] = useState(null);
   const [renderRecommendation, setRenderRecommendation] = useState(null);
   const [nameButton, setNameButton] = useState('Continue Recipe');
@@ -147,53 +147,67 @@ function RecipeDetails(props) {
 
     <>
       <h1>aux</h1>
-      { recipeDetailsRender.length > 0 && recipeDetailsRender.map((recipe, index) => (
-        <div key={ index }>
-          <img
-            src={ recipe.strImageSource }
-            alt=""
-            data-testid="recipe-photo"
-          />
-          <h1
-            data-testid="recipe-title"
-          >
-            {recipe.strMeal || recipe.strDrink}
-          </h1>
+      { recipeDetailsRender.length > 0 && recipeDetailsRender
+        .map((recipe, index) => (
+          <div key={ index }>
+            <img
+              src={ recipe.strImageSource }
+              alt=""
+              data-testid="recipe-photo"
+            />
+            <h1
+              data-testid="recipe-title"
+            >
+              {recipe.strMeal || recipe.strDrink}
+            </h1>
 
-          <p
-            data-testid="recipe-category"
-          >
-            {`${recipe.strCategory} - `}
+            <p
+              data-testid="recipe-category"
+            >
+              {`${recipe.strCategory} - `}
 
-            {recipe.strAlcoholic}
-          </p>
-          <ol>
-            {recipeIngredients && recipeIngredients.map((ingredient, i) => (
-              <li
-                data-testid={ `${i}-ingredient-name-and-measure` }
-                key={ i }
-              >
-                {`${Object.keys(ingredient)} - `}
-                {Object.values(ingredient)}
-              </li>
-            ))}
-          </ol>
-          <p
-            data-testid="instructions"
-          >
-            {recipe.strInstructions}
-          </p>
-          <iframe
-            src={ recipe.strYoutube }
-            data-testid="video"
-            width="480"
-            height="350"
-            title={ recipe.strMeal || recipe.strDrink }
-          />
-        </div>
-      ))}
+              {recipe.strAlcoholic}
+            </p>
+            <ol>
+              {recipeIngredients && recipeIngredients.map((ingredient, i) => (
+                <li
+                  data-testid={ `${i}-ingredient-name-and-measure` }
+                  key={ i }
+                >
+                  {`${Object.keys(ingredient)} - `}
+                  {Object.values(ingredient)}
+                </li>
+              ))}
+            </ol>
+            <p
+              data-testid="instructions"
+            >
+              {recipe.strInstructions}
+            </p>
+            <iframe
+              src={ recipe.strYoutube }
+              data-testid="video"
+              width="480"
+              height="350"
+              title={ recipe.strMeal || recipe.strDrink }
+            />
+            <LikeNShareButtons
+              index={ index }
+              id={ recipe.idMeal || recipe.idDrink }
+              type={ recipe.idMeal ? 'meal' : 'drink' }
+            />
+          </div>
+        ))}
 
       <div className="scroll">
+        <button
+          type="button"
+          data-testid="start-recipe-btn"
+          className="start-button"
+          onClick={ teste }
+        >
+          {nameButton}
+        </button>
         {renderRecommendation && renderRecommendation.map((recipe, index) => (
           <div
             data-testid={ `${index}-recommendation-card` }
@@ -205,33 +219,8 @@ function RecipeDetails(props) {
               {recipe.strMeal || recipe.strDrink}
             </h1>
           </div>
-
         ))}
       </div>
-      <button
-        type="button"
-        data-testid="start-recipe-btn"
-        className="start-button"
-        onClick={ teste }
-      >
-        {nameButton}
-      </button>
-      <button
-        type="button"
-        data-testid="share-btn"
-        className="share-btn"
-        // onClick={} "vamos precisar em requisitos futuros"
-      >
-        Compartilhar
-      </button>
-      <button
-        type="button"
-        data-testid="favorite-btn"
-        className="favorite-btn"
-        onClick={ () => setFavoriteRecipesStorage(recipeDetailsRender) }
-      >
-        Favoritar
-      </button>
     </>
   );
 }

@@ -1,15 +1,32 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import clipboardCopy from 'clipboard-copy';
+import { withRouter } from 'react-router-dom';
 import shareIcon from '../images/shareIcon.svg';
 import blackHeartIcon from '../images/blackHeartIcon.svg';
+import whiteHeartIcon from '../images/whiteHeartIcon.svg';
 import FavContext from '../context/FavContext';
+import { setFavoriteRecipesStorage } from '../helpers/SetStorageFunctions';
+import RecommendationsContext from '../context/RecommendationsContext';
 
-function LikeNShareButtons({ index, id, type }) {
+function LikeNShareButtons({ index, id, type, history }) {
   const { dataFavorites, setDataFavorites } = useContext(FavContext);
+  const { recipeDetailsRender } = useContext(RecommendationsContext);
   const [clickEvent, setClickEvent] = useState({});
   const [isCopied, setIsCopied] = useState(false);
+  const { favorite, setFavorite } = useContext(FavContext);
+
+  useEffect(() => {
+    const stored = localStorage.getItem('favoriteRecipes');
+    const storedRecipes = JSON.parse(stored) || [];
+    const isFavorite = storedRecipes.some((recipe) => recipe.id === id);
+    return setFavorite(isFavorite);
+  });
+
+  useEffect(() => {
+
+  }, [favorite]);
 
   const timer = 500;
   const disabledLinkCopied = () => {
@@ -18,10 +35,13 @@ function LikeNShareButtons({ index, id, type }) {
 
   const removeRecipe = () => {
     const newData = dataFavorites.filter((recipe) => recipe.id !== id);
-
     setDataFavorites(newData);
-    // localStorage.clear();
     localStorage.setItem('favoriteRecipes', JSON.stringify(newData));
+  };
+
+  const setFavoriteAndStorage = () => {
+    setFavorite(true);
+    setFavoriteRecipesStorage(recipeDetailsRender);
   };
 
   const cinco = 5;
@@ -29,28 +49,35 @@ function LikeNShareButtons({ index, id, type }) {
 
   return (
     <div>
+      {/* { favorite ? <p>true</p> : <p>false</p>} */}
       <button
         type="button"
-        data-testid={ `${index}-horizontal-favorite-btn` }
-        src={ blackHeartIcon }
+        data-testid={ !history.location.pathname.includes('favorite')
+          ? 'favorite-btn'
+          : `${index}-horizontal-favorite-btn` }
+        src={ favorite ? blackHeartIcon : whiteHeartIcon }
         style={ {
           borderRadius: '100%',
           padding: '8px',
           backgroundColor: '#ff6e5e',
           border: 'none',
         } }
-        onClick={ () => removeRecipe() }
+        onClick={ favorite
+          ? () => removeRecipe()
+          : () => setFavoriteAndStorage() }
       >
         <img
-          src={ blackHeartIcon }
-          type="image/svg+xml"
-          alt="BlackHeart Icon"
+          src={ favorite ? blackHeartIcon : whiteHeartIcon }
+          type="imge'svg+xml'"
+          alt={ favorite ? 'BlackHeart Icon' : 'WhiteHeart Icon' }
           width="30px"
         />
       </button>
       <button
         type="button"
-        data-testid={ `${index}-horizontal-share-btn` }
+        data-testid={ !history.location.pathname.includes('favorite')
+          ? 'share-btn'
+          : `${index}-horizontal-share-btn` }
         id="copy-button"
         src={ shareIcon }
         onClick={ (e) => {
@@ -98,4 +125,6 @@ LikeNShareButtons.propTypes = {
   id: PropTypes.string.isRequired,
 };
 
-export default LikeNShareButtons;
+LikeNShareButtons.propTypes = {}.isRequired;
+
+export default withRouter(LikeNShareButtons);
